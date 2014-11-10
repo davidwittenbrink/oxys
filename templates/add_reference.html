@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+	<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="stylesheet" href="/static/add_reference.css" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys: Add Reference</title>
+	</head>
+    <body>
+        <div id="fb-root"></div>
+		<div id="header">	
+          <a class="menu-button" href="#menu">
+              <img src="/static/graphics/menu_button.svg" alt="menu-button" />
+          </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+		</div> <!--end header -->
+        <div id="ultraContainer">
+            
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <h3>Add reference:</h3>
+                    <form id="reference-form">
+                        <div class="row">
+                            <div class="user-to-do">
+                                Give your reference a name:
+                            </div>
+                            <input class="input-field" name="reference_name" />
+                            <span class="error">
+                                You have to give your reference a name!
+                            </span>
+                            <span class="explanation">e.g. On the Origin of Species by Darwin, ...</span>
+                        </div><!--end row-->
+                        <div class="row">
+                            <div class="user-to-do">
+                                Add a description:
+                            </div>
+                            <textarea name="reference_description"></textarea>
+                        </div><!--end row-->
+                        <div class="row ref-row">
+                            <span>Link:</span>
+                            <input class="input-field ref-url" name="reference_url" />
+                            <select name="reference_type">
+                                <option value="Audio" selected>Audio</option>
+                                <option value="Mooc">Mooc</option>
+                                <option value="PDF/document">PDF/Document</option>
+                                <option value="Video" selected>Video</option>
+                                <option value="Website" selected="selected">Website</option>
+                                <option value="Book" >Book</option>
+                                <option value="Paper">Paper</option>
+                                <option value="App">App</option>
+                            </select>
+                            <div class="error">
+                                You have to specify a link!
+                            </div>
+                        </div><!-- end ref-row -->
+                        <div class="row">
+                            <button type="button" class="reference-submit-button">
+                                Submit
+                            </button>
+                        </div><!--end row-->
+                        <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                    </form>
+                </div><!--end card -->
+            </section>
+        </div><!-- end ultraContainer -->
+        <script type="text/javascript">
+            //AUTO GROW TEXTAREA///////////////////////////
+            $(function() {
+                $('.row textarea').autogrow();
+            });
+            /////////
+            ///SUBMISSION
+            SUBMITABLE = true;
+            
+            $( ".reference-submit-button" ).click(function() {
+                obj = createFormData("#reference-form");
+                console.log(obj);
+                console.log(SUBMITABLE, obj["reference_name"], obj["reference_url"]);
+                topic_key = window.location.pathname.split("/")[2];
+                if( SUBMITABLE && obj["reference_name"] && obj["reference_url"] ) {
+                    ajaxPost(obj, ("/topics/" + topic_key + "/addRef"), 
+                                 ("/topics/" + topic_key + "/references/"));
+                }
+                else {
+                    if(! obj["reference_name"])
+                        $(".input-field[name=reference_name]").next().css("display", "block");
+                    if(! obj["reference_url"])
+                        $("select[name=reference_type]").next().css("display", "block");
+                }
+            });
+            
+            function createFormData(form) {
+                //Creates Form Data. If multiple elements have the same
+                //name it will create an entry name : "value1|value2"
+                var obj={}
+                var s = $(form).serializeArray();
+                for(i=0; i<s.length; i++) {
+                    if(obj[s[i]["name"]]) {
+                        obj[s[i]["name"]] = obj[s[i]["name"]] + "||" +  s[i]["value"];   
+                    }
+                    else {
+                        obj[s[i]["name"]] = s[i]["value"];
+                    }
+                }
+                return obj;
+            }
+            
+            function ajaxPost(obj, to, redirectTo){
+                if(SUBMITABLE) {
+                    SUBMITABLE = false;
+                    $.ajax({
+                        type: 'POST',
+                        url: to,
+                        data: obj,
+                        dataType: "json",
+                        timeout: 18000,
+                        success: function(result){
+                            if(result["status"] == "ok") {
+                                window.location = redirectTo + result["key"];
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            console.log(xhr, ajaxOptions, thrownError);
+                            SUBMITABLE = true;
+                        }
+                    });
+                }
+		    }
+        </script>
+    </body>
+</html>

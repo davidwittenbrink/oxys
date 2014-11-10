@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/group_settings_page.css" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys: Group Settings</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button" />
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <h2>Group Settings:</h2>
+                </div>
+                <form method="post">
+                    <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                    <input type="hidden" name="remove_school" value="" />
+                    <div class="card">
+                        <h3>Basic settings:</h3>
+                        <div class="row">
+                            <div class="user-to-do">
+                                Group name:
+                            </div>
+                            <input class="input-field" name="group_name" value="{{ group.name }}" />
+                            <span class="error">
+                                You need to give your Group a name.
+                            </span>
+                        </div><!--end row-->
+                        <div class="row">
+                            <div class="user-to-do">
+                                Description:
+                            </div>
+                            <textarea name="group_description">{{ group.description }}</textarea>
+                        </div><!--end row-->
+                        <div class="row">
+                            <label>
+                                <input type="checkbox" {% if group.is_public %} checked {% endif %} name="public" />
+                                Make this Group public
+                                <span class="explanation">People having the link will be able to join without you having to confirm.</span>
+                            </label>
+                        </div><!--end row-->
+                        {% if school and group.in_school %}
+                        <div class="row school_row js_hide">
+                            <div class="user-to-do">
+                                Assigned to: {{ school.name }}
+                                <button class="remove-school" type="button">Remove</button>
+                            </div>
+                        </div><!--end row-->
+                        <div class="row js_hide">
+                            <label>
+                                <input type="checkbox" name="approvable" {% if group.is_approvable %} checked {% endif %} />
+                                This school can see and approve this group.
+                            </label>
+                        </div><!--end row-->
+                        {% endif %}
+                    </div> <!-- end card -->
+                    {% if admin_topic_list or member_topic_list %}
+                    <div class="card">
+                        <h3>Select the topics you want to remove from this group:</h3>
+                        {% if admin_topic_list %}
+                        <div class="topic-removal">
+                            <div class="topic-by">Topics by admins:</div>
+                            {% for topic in admin_topic_list %}
+                            <div class="topic">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ topic.key.urlsafe() }}" name="admin-topic" />
+                                        {{ topic.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end topic-removal -->
+                        {% endif %}
+                        {% if member_topic_list %}
+                        <div class="topic-removal">
+                            <div class="topic-by">Topics by members:</div>
+                            {% for topic in member_topic_list %}
+                            <div class="topic">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ topic.key.urlsafe() }}" name="member-topic" />
+                                        {{ topic.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end topic-removal -->
+                        {% endif %}
+                        
+                    </div><!-- end card -->
+                    {% endif %}
+                    {% if admin_task_list or member_task_list %}
+                    <div class="card">
+                        <h3>Select the tasks you want to delete:</h3>
+                        {% if admin_task_list %}
+                        
+                        <div class="task-removal">
+                            <div class="task-by">Tasks by admins:</div>
+                            {% for task in admin_task_list %}
+                            <div class="task">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ task.key.urlsafe() }}" name="task" />
+                                        {{ task.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end task-removal -->
+                        {% endif %}
+                        {% if member_task_list %}
+                        <div class="task-removal">
+                            <div class="task-by">Tasks by members:</div>
+                            {% for task in member_task_list %}
+                            <div class="task">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ task.key.urlsafe() }}" name="task" />
+                                        {{ task.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end task-removal -->
+                        {% endif %}
+                    </div><!-- end card -->
+                    {% endif %}
+                    {% if admin_event_list or member_event_list %}
+                    <div class="card">
+                        <h3>Select the events you want to delete:</h3>
+                        {% if admin_event_list %}
+                        
+                        <div class="event-removal">
+                            <div class="event-by">Events by admins:</div>
+                            {% for event in admin_event_list %}
+                            <div class="event">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ event.key.urlsafe() }}" name="event" />
+                                        {{ event.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end event-removal -->
+                        {% endif %}
+                        {% if member_event_list %}
+                        <div class="event-removal">
+                            <div class="event-by">Events by members:</div>
+                            {% for event in member_event_list %}
+                            <div class="event">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ event.key.urlsafe() }}" name="event" />
+                                        {{ event.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end event-removal -->
+                        {% endif %}
+                    </div><!-- end card -->
+                    {% endif %}
+                    <div class="card">
+                        <input type="submit" value="Save Changes" class="group-submit-button">
+                    </div><!-- end card -->
+                </form>
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            //AUTO GROW TEXTAREA///////////////////////////
+            $(function() {
+                $('.row textarea').autogrow();
+            });
+            
+            $(".remove-school").click(function(){
+                if (window.confirm('Are you sure you want to remove this Group from this school? This can not be undone.')) {
+                    val = $("input[name=remove_school]").val();
+                    val == "1" ? val = "" : val = "1";
+                    if(val = "1") {
+                        $(".js_hide").css("display", "none");
+                    }
+                    $("input[name=remove_school]").val(val);
+                }
+            });
+            
+        </script>
+    </body>
+</html>

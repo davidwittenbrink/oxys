@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="stylesheet" href="/static/add_date_task.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys: Add Date or Task</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button" />
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <div id="add-event-link">
+                        <button>Add an Event</button>
+                    </div>
+                    <div id="add-task-link">
+                        <button class="passive">Add a Task</button>
+                    </div>
+                    <div id="add-event-tab-content">
+                        <form id="event-form" method="post">
+                            <div class="row">
+                                <div class="user-to-do">
+                                    How do you want to call this event?
+                                </div>
+                                <input class="input-field" name="event_name" />
+                                <span class="error">
+                                    You need to give your event a name.
+                                </span>
+                                <span class="explanation">e.g. Test, field trip,  ...</span>
+                            </div><!--end row-->
+                            <div class="row">
+                                <div class="user-to-do">
+                                    Add a description!
+                                </div>
+                                <textarea name="event_description"></textarea>
+                            </div><!--end row-->
+                            <div id="event-calendar"></div>
+                            <div class="row">
+                                <div class="user-to-do">
+                                    On what time?
+                                </div>
+                                <input type="number" name="hours">
+                                <input type="number" name="minutes">
+                                <div class="error time-error">
+                                    Did you enter a valid date and time?
+                                </div>
+                                <input type="hidden" name="single_calendar_date" value="">
+                                
+                            </div> <!-- end row -->
+                            
+                            <div class="row">
+                                <button type="button" class="event-submit-button">
+                                    Submit
+                                </button>
+                            </div><!--end row-->
+                            <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                        </form>
+                    </div><!-- end add-event-tab-content -->
+                    <div id="add-task-tab-content">
+                        <form id="task-form" method="post">
+                            <div class="row">
+                                <div class="user-to-do">
+                                    How do you want to call this task?
+                                </div>
+                                <input class="input-field" name="task_name" />
+                                <span class="error">
+                                    You have to give your task a name.
+                                </span>
+                                <span class="explanation">e.g. Homework 1, Research Grace Hopper...</span>
+                            </div><!--end row-->
+                            <div class="row">
+                                <div class="user-to-do">
+                                    To do:
+                                </div>
+                                <textarea name="task_description"></textarea>
+                            </div><!--end row-->
+                            <div id="task-calendar"></div>
+                            <div class="row">
+                                <div class="user-to-do">
+                                    On what time?
+                                </div>
+                                <input type="number" name="hours">
+                                <input type="number" name="minutes">
+                                <div class="error time-error">
+                                    Did you enter a valid date and time?
+                                </div>
+                                <input type="hidden" name="single_calendar_date" value="">
+                                
+                            </div> <!-- end row -->
+                            <input type="hidden" name="dontCSRFme" value="{{csrf_token}}">
+                            <div class="row">
+                                <button type="button" class="task-submit-button">
+                                    Submit
+                                </button>
+                            </div><!--end row-->
+                        </form>
+                    </div><!-- end add-task-tab-content -->
+                </div><!--end card -->
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            ///////////////////////////////////////   
+            
+            //Tab-switcher//
+            var setTabClasses = function(elementOnePath, elementTwoPath) {
+                if(($(elementOnePath).hasClass("passive"))){
+                    $(elementOnePath).toggleClass("passive");
+                    $(elementTwoPath).toggleClass("passive");
+                }
+            }
+            
+            var updateTabContent = function() {
+                if(($("#add-event-link button").hasClass("passive"))){ 
+                    //if create a task is active
+                    $("#add-event-tab-content").css("display", "none");
+                    $("#add-task-tab-content").css("display", "block");
+                }
+                else {
+                    $("#add-task-tab-content").css("display", "none");
+                    $("#add-event-tab-content").css("display", "block");
+                }
+                
+            }
+            
+            $( "#add-event-link button" ).click(function() {
+                setTabClasses("#add-event-link button", "#add-task-link button");
+                $("#time-error").hide();
+                $("#task-calendar").html('');
+                $("#event-calendar").append($(drawCalendar()).fadeIn('slow'));
+                updateTabContent();
+            });
+            
+            $( "#add-task-link button" ).click(function() {
+                setTabClasses("#add-task-link button", "#add-event-link button");
+                $("#time-error").hide();
+                $("#event-calendar").html('');
+                $("#task-calendar").append($(drawCalendar()).fadeIn('slow'));
+                updateTabContent();
+            });
+            //////////////////END TAB SWITCHER ///
+            
+            //CALENDAR//
+            
+            
+            $("#event-calendar").append(drawCalendar());
+            
+            $( document ).on('click', '.calendar-day', function() {
+                $( ".calendar-day" ).each(function(){
+                    $( this ).css("background-color", "inherit");
+                });
+                $( this ).css("background-color", "#ececec");
+                $('input[name=single_calendar_date]').val(classList($( this ))[1]);
+                
+                
+                
+            });
+            
+            $( document ).on('click', '.arrow', function() {
+                $('input[name=single_calendar_date]').val("");
+                switch($(this).hasClass("month-left")) {
+                    case true:
+                        decrementMonth();
+                        break;
+                    case false:
+                        incrementMonth();
+                        break;
+                }
+                if($( this ).parents('#task-calendar').length > 0) {
+                    $("#task-calendar").html('');
+                    $("#task-calendar").append($(drawCalendar(MONTH, YEAR)).fadeIn('slow'));
+                }
+                else {
+                    $("#event-calendar").html('');
+                    $("#event-calendar").append($(drawCalendar(MONTH, YEAR)).fadeIn('slow'));
+                }
+            });
+            
+            function classList(elem){
+                var classList = elem.attr('class').split(/\s+/);
+                var classes = new Array(classList.length);
+                $.each( classList, function(index, item){
+                    classes[index] = item;
+                });
+                
+                return classes;
+            }
+            /////END CALENDAR /////
+            //AUTO GROW TEXTAREA///////////////////////////
+            $(function() {
+                $('.row textarea').autogrow();
+            });
+            /////////
+            
+            /////SUBMISSION PART
+            
+            
+            
+            var convertToUTC = function(date_class, h, m) {
+                if(date_class) {
+                    dateArray = date_class.split("-").splice(2);
+                    year = parseInt(dateArray[2]);
+                    day = parseInt(dateArray[0]);
+                    month = parseInt(dateArray[1]) - 1;
+                    if(h && m && parseInt(h) >= 0 && parseInt(h) < 24 && parseInt(m) >= 0 && parseInt(m) <= 60)
+                    {
+                        return new Date(year, month, day, h, m).toUTCString(); 
+                    }
+                }
+                console.log("time or date error");
+                return 0;
+            }
+            
+            $( ".event-submit-button" ).click(function() {
+                
+                
+                obj = createFormData("#event-form");
+                console.log(obj);
+                obj["single_calendar_date"] = convertToUTC(obj["single_calendar_date"],
+                                                           obj["hours"],
+                                                           obj["minutes"]);
+                delete obj.am_pm;
+                delete obj.hours;
+                delete obj.minutes;
+                group_key = window.location.pathname.split("/")[2];
+                
+                if(obj["single_calendar_date"] && obj["event_name"]) {
+                    
+                    ajaxPost(obj, ("/groups/" + group_key + "/addEvent"), 
+                             ("/groups/" + group_key + "/events/"));
+                    
+                }
+                else {
+                    if(! obj["single_calendar_date"])
+                        $(".time-error").css("display", "block");
+                    else
+                        $(".time-error").css("display", "none");
+                    
+                    if(! obj["event_name"])
+                        $("input[name=event_name]").next().css("display", "block");
+                    else
+                        $("input[name=event_name]").next().css("display", "none");
+                }
+                
+                
+            });
+            
+            $( ".task-submit-button" ).click(function() {
+                
+                obj = createFormData("#task-form");
+                
+                obj["single_calendar_date"] = convertToUTC(obj["single_calendar_date"],
+                                                           obj["hours"],
+                                                           obj["minutes"],
+                                                           obj["am_pm"]);
+                delete obj.am_pm;
+                delete obj.hours;
+                delete obj.minutes;
+                group_key = window.location.pathname.split("/")[2];
+                
+                if(obj["single_calendar_date"] && obj["task_name"]) {
+                    
+                    ajaxPost(obj, ("/groups/" + group_key + "/addTask"), 
+                             ("/groups/" + group_key + "/tasks/"));
+                }
+                else {
+                    if(! obj["single_calendar_date"])
+                        $(".time-error").css("display", "block");
+                    else
+                        $(".time-error").css("display", "none");
+                    
+                    if(! obj["task_name"])
+                        $("input[name=task_name]").next().css("display", "block");
+                    else
+                        $("input[name=task_name]").next().css("display", "none");
+                }
+                
+            });
+            
+            function createFormData(form) {
+                //Creates Form Data. If multiple elements have the same
+                //name it will create an entry name : "value1|value2"
+                var obj={}
+                var s = $(form).serializeArray();
+                for(i=0; i<s.length; i++) {
+                    if(obj[s[i]["name"]]) {
+                        obj[s[i]["name"]] = obj[s[i]["name"]] + "||" +  s[i]["value"];   
+                    }
+                    else {
+                        obj[s[i]["name"]] = s[i]["value"];
+                    }
+                }
+                return obj;
+            }
+            
+            function ajaxPost(obj, to, redirectTo){
+                
+                    trigger_Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: to,
+                        data: obj,
+                        dataType: "json",
+                        timeout: 18000,
+                        success: function(result){
+                            if(result["status"] == "ok") {
+                                window.location = redirectTo + result["key"];
+                            }
+                            trigger_Loading();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            console.log(xhr, ajaxOptions, thrownError);
+                            trigger_Loading();
+                        }
+                    });
+                
+            }
+            ////END SUBMISSION PART
+        </script>
+    </body>
+</html>

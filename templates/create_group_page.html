@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <script src="/static/kul-substitute.js"></script>
+        <title>Oxys: Create a new Group</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="../static/graphics/menu_button.svg" alt="menu-button" />
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <div id="add-group-content">
+                        <h2 style="text-align: center">Create a new Group</h2>
+                        <form id="group-form" method="post">
+                            <div class="row">
+                                <div class="user-to-do">
+                                    What's the name of your group?
+                                </div>
+                                <input class="input-field" name="group_name" value="{{ entered_group_name }}" />
+                                <span class="error">
+                                    You need to give your Group a name.
+                                </span>
+                                <span class="explanation">e.g. Mathematics 10th Grade, History Mooc 2013 ...</span>
+                                
+                            </div><!--end row-->
+                            <div class="row">
+                                <div class="user-to-do">
+                                    Add a description!
+                                </div>
+                                <textarea name="group_description"></textarea>
+                            </div><!--end row-->
+                            <div class="row">
+                                <label>
+                                    <input type="checkbox" name="public">
+                                    Make this Group public
+                                    <span class="explanation">People having the link will be able to join without you having to confirm.</span>
+                                </label>
+                            </div><!--end row-->
+                            <div class="hidden-menu">
+                                <button type="button" class="hidden-menu-button">
+                                    Assign to a school
+                                    <img src="../static/graphics/Pfeilspitze.svg" alt="menu-button">
+                                </button>
+                                <div class="hidden-menu-content">
+                                    <div class="school-search-fields row">
+                                        <div class="user-to-do">
+                                            What school are you looking for?
+                                        </div>
+                                        <input class="input-field" name="school_name" value="{{ entered_school_name }}" />
+                                        <span class="error">
+                                            Please enter the name of your school.
+                                        </span>
+                                        <span class="explanation">e.g. Stanford University, High School of Arts ...</span>
+                                    </div><!--end row-->
+                                    <button type="button" class="school-search">
+                                        Search
+                                    </button>
+                                    <img src="/static/images/powered-by-google-on-white.png" alt="Powered by Google" />
+                                    
+                                </div><!--end hidden-menu-content -->
+                            </div> <!-- end hidden-menu -->
+                            <div class="row">
+                                <button type="button" class="group-submit-button">
+                                    Submit
+                                </button>
+                                <span class="explanation">Don't worry, you can change most of this later!</span>
+                            </div><!--end row-->
+                            <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                            
+                        </form>
+                    </div><!--end add-group-content -->
+                </div> <!--end card -->
+                
+            </section>
+        </div><!-- end ultraContainer -->
+        <script type="text/javascript">
+            
+            $( ".school-search" ).click(function(){
+                var school_name = $( 'input[name=school_name]' ).val();
+                if(school_name)
+                    searchSchool(school_name);
+                
+            });
+            ////////////////////////////////////////////
+            //Assign to school slide down and up.
+            $( ".hidden-menu-button" ).click(function() {
+                $( this ).next().slideToggle( "slow", function() {
+                    // Animation complete.
+                });
+            });
+            ///////////////////////////////////////
+            
+            //AUTO GROW TEXTAREA///////////////////////////
+            $(function() {
+                $('.row textarea').autogrow();
+            });
+            ///////// Submit stuff
+            
+            var SUBMITABLE = true;
+            
+            $( ".group-submit-button" ).click(function() {
+                obj = createFormData("#group-form");
+                if(SUBMITABLE && obj["group_name"]) {
+                    ajaxPost(obj, "/createGroup", "/groups/");
+                }
+                else {
+                    if(!obj["group_name"]) {
+                        $(".input-field[name=group_name]").next().css("display", "block");
+                    }
+                }
+            });
+            
+            function createFormData(form) {
+                //Creates Form Data. If multiple elements have the same
+                //name it will create an entry name : "value1|value2"
+                var obj={}
+                var s = $(form).serializeArray();
+                for(i=0; i<s.length; i++) {
+                    if(obj[s[i]["name"]]) {
+                        obj[s[i]["name"]] = obj[s[i]["name"]] + "||" +  s[i]["value"];   
+                    }
+                    else {
+                        obj[s[i]["name"]] = s[i]["value"];
+                    }
+                }
+                return obj;
+                
+            }
+            
+            function searchSchool(name) {
+                if(name) {
+                    data = {};
+                    data["school_name"] = name;
+                    trigger_Loading();
+                    $.ajax({
+                        type: 'GET',
+                        url: "/schoolSearch",
+                        data: data,
+                        dataType: "json",
+                        timeout: 18000,
+                        success: function(result) {
+                            if(result["status"] == "ok" && !result["msg"]) {
+                                handleSchoolSearchResponse(result);
+                            }
+                            else {
+                                alert(result["msg"]);
+                            }
+                            trigger_Loading();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            trigger_Loading();
+                            console.log(xhr, ajaxOptions, thrownError);
+                            alert("Sorry, there was an error");
+                        }
+                    });
+                }
+            }
+            
+            function handleSchoolSearchResponse(result) {
+                console.log(result);
+                $('#search-results').remove();
+                var finished_html = "";
+                if(result["schools"].length > 0) {
+                    var first_html_part = '<div id="search-results"><div class="user-to-do">Choose a school:</div><div id="school-search-results"><label><input type="radio" name="school" value="" /> None <br /></label>';
+                    var school_template_string = '<label><input type="radio" name="school" value="${ gmaps_reference }"/> ${ name }</label><br />';
+                    var last_html_part = '<div class="checkbox-row"><label><input type="checkbox" name="approvable">This school can see and approve this group.</label></div><!--end checkbox-row--></div></div>';
+                    
+                    finished_html += first_html_part;
+                    
+                    for(i=0; i < result["schools"].length; i++) {
+                        finished_html += $.substitute(school_template_string, result["schools"][i]);
+                    }
+                    finished_html += last_html_part;
+                    
+                }
+                else {
+                    finished_html='<div id="search-results" style="color: red; width: 100%; text-align: center; margin-bottom: 4%;">Sorry, no schools were found.';
+                }
+                $('.school-search-fields').after(finished_html);
+                
+            }
+            
+            function ajaxPost(obj, to, redirectTo){
+                SUBMITABLE = false;
+                trigger_Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: to,
+                    data: obj,
+                    dataType: "JSON",
+                    timeout: 18000,
+                    success: function(result){
+                        if(result["status"] == "ok") {
+                            trigger_Loading();
+                            window.location = redirectTo + result["key"];
+                        }
+                        else {
+                            trigger_Loading();
+                            console.log(result)}
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        SUBMITABLE = true;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

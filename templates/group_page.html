@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_group_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/scroozer_reference_page.css" />
+        <meta property="og:title" content="{{ group.name }}" />
+        <meta property="og:site_name" content="Scroozer" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ url }}" />
+        <meta property="og:image" content="https://gcdc2013-oxys.appspot.com/static/images/og-logo.png" />
+        <meta property="og:description" content="{% if meta_group_description %}{{ meta_group_description }}{% else %}A Scroozer Group{%endif%}" />
+        <meta property="fb:app_id" content="605822282815813" />
+        {% if not group.is_public %}<meta name="robots" content="noindex, follow"> {% endif %}
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <script src="/static/kul-substitute.js"></script>
+        
+        <title>Oxys Group: {{ group.name }}</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        
+        <div id="header">
+            {% if is_logged_in %}
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button">
+            </a>
+            {% endif %}
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="share" class="hidden">
+            <button type="button" alt="close this window" class="close-button">X</button>
+            <div id="share-wrapper">
+                <h2>Copy the URL:</h2>
+                <input class="url-input" value="{{ url }}">
+                
+                <h2> or share it:</h2>
+                <div class="fb-share-button" data-href="{{ url }}" data-type="button_count"></div>
+                <div class="g-share"><div class="g-plus" data-action="share" data-annotation="bubble"></div>
+
+                </div></div>
+            <div>
+                
+            </div>
+        </div>
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                {% if is_logged_in %}
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+                {% endif %}
+            </nav>
+            
+            <section role="main">
+                <div class="card">
+                    <div id="group-name-headline">
+                        <h2>Group: {{ group.name }}</h2>
+                    </div>
+                </div><!-- end card-->
+                {% if group.description %}
+                <div class="card">
+                    <h3>About this group:</h3>
+                    <div class="card-text">
+                        <pre>{{group.description}}</pre>
+                    </div>
+                    {% if school %}
+                    <div class="authorized">This Group is authorized by {{ school.name }}</div>
+                    {% endif %}
+                </div><!-- end card -->
+                {% endif %}
+                {% if ( user_key in group.members or user_key in group.admins) or ( user_key in group.admins and not group.is_public) or ( user_key not in group.members and user_key not in group.admins and user_key not in group.awaiting_members) %}
+                <div class="card">
+                    <h3>Group actions:</h3>
+                    {% if user_key in group.members or user_key in group.admins %}
+                    <a class="action" href="/groups/{{ group.key.urlsafe() }}/add"><button>Add Event/Task</button></a>
+                    <a class="action" href="/groups/{{ group.key.urlsafe() }}/members"><button>View Members</button></a>
+                    <a class="action" href="/groups/{{ group.key.urlsafe() }}/addTopic"><button>Add Topic</button></a>
+                    <a class="action leave-group" href=""><button>Leave Group</button></a>
+                    <a class="action share-this" href=""><button>Invite People</button></a>
+                    {% endif %}
+                    {% if user_key in group.admins and not group.is_public%}
+                    <a class="action" href="/groups/{{ group.key.urlsafe() }}/approve"><button>Approve Members ({{ group.awaiting_members|length }})</button></a>
+                    {% endif %}
+                    {% if user_key not in group.members and user_key not in group.admins and user_key not in group.awaiting_members%}
+                    <a class="action {% if is_logged_in %}join{% else %}signup-prompt{%endif%}" href=""><button>Join this Group</button></a>
+                    {% endif %}
+                    {% if user_key in group.admins %}
+                    <a class="action" href="/groups/{{ group.key.urlsafe() }}/settings"><button>Change Settings</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if admin_topic_list and (group.is_public or is_logged_in)%}
+                <div class="card">
+                    <h3>Topics by admins:</h3>
+                    <ul class="admin-topics">
+                        {% for topic in admin_topic_list %}
+                        {% if topic %}
+                        <li>
+                            <a href="/topics/{{ topic.key.urlsafe() }}">
+                                {{ topic.name }}
+                            </a>
+                        </li>
+                        {%endif%}
+                        {% endfor %}
+                    </ul>
+                    {% if admin_topic_list|length >= 5 %}
+                    <a href="/groups/{{ group.key.urlsafe() }}/viewAdminTopics"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                
+                {% endif %}
+                {% if user_topic_list and (group.is_public or is_logged_in) %}
+                <div class="card">
+                    <h3>Topics by user:</h3>
+                        <ul class="admin-topics">
+                            {% for topic in user_topic_list %}
+                            <li><a href="/topics/{{ topic.key.urlsafe() }}">{{ topic.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% if user_topic_list|length >= 5 %}
+                    <a href="/groups/{{ group.key.urlsafe() }}/viewMemberTopics"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if admin_tasks and (group.is_public or is_logged_in) %}
+                <div class="card">
+                    <h3>Upcoming Tasks (by admins):</h3>
+                    <ul class="next-dates">
+                        {% for task in admin_tasks %}
+                        <li>
+                            <a href="/groups/{{group.key.urlsafe()}}/tasks/{{ task.key.urlsafe() }}">
+                                <span data-utc-string="{{ task.due_utc }}" class="due"></span>
+                                <span class="date-header">{{ task.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if member_tasks and (group.is_public or is_logged_in) %}
+                <div class="card">
+                    <h3>Upcoming Tasks (by members):</h3>
+                    <ul class="next-dates">
+                        {% for task in member_tasks %}
+                        <li>
+                            <a href="/groups/{{group.key.urlsafe()}}/tasks/{{ task.key.urlsafe() }}">
+                                <span data-utc-string="{{ task.due_utc }}" class="due"></span>
+                                <span class="date-header">{{ task.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if admin_events and (group.is_public or is_logged_in) %}
+                <div class="card">
+                    <h3>Upcoming Events (by admins):</h3>
+                    <ul class="next-dates">
+                        {% for event in admin_events %}
+                        <li>
+                            <a href="/groups/{{ group.key.urlsafe() }}/events/{{ event.key.urlsafe() }}">
+                                <span data-utc-string="{{ event.starting_day_utc }}" class="due"></span>
+                                <span class="date-header">{{ event.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if member_events and (group.is_public or is_logged_in) %}
+                <div class="card">
+                    <h3>Upcoming Events (by members):</h3>
+                    <ul class="next-dates">
+                        {% for event in member_events %}
+                        <li>
+                            <a href="/groups/{{ group.key.urlsafe() }}/events/{{ event.key.urlsafe() }}">
+                                <span data-utc-string="{{ event.starting_day_utc }}" class="due"></span>
+                                <span class="date-header">{{ event.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}">
+                {% if is_logged_in and user_key and (user_key in group.admins or user_key in group.members) %}
+                <div class="card">
+                    <div class="comments">
+                        <button type="button" class="load-more-button load-comments">
+                            <img src="/static/graphics/Pfeilspitze.svg" alt="menu-button" />
+                            Posts in this Group
+                        </button>
+                        <div class="hidden-content">
+                            <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                            <button id="load-older">Load older posts</button>
+                            <div class="comment">
+                                <img src="{{ user_profile_pic }}" alt="profile_picture_small" />
+                                <span>Post something:</span>
+                                <textarea name="comment"></textarea>
+                                <button id="send-comment">Send</button>
+                            </div><!-- end comment -->
+                        </div>
+                    </div>
+                </div><!-- end card -->
+                {% endif %}
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            var openMenu = function() {
+                $( ".hidden-content" ).slideToggle( "slow", function() {
+                    // Animation complete.
+                });
+                $( ".hidden-content" ).toggleClass('opened');
+            }
+            
+            setWidthAsItemHeight("nav li");
+            
+            $( ".load-comments" ).click(function() {
+                if(! $( '.hidden-content' ).hasClass('opened')
+                   && $( ".comment" ).length == 1) {
+                    $('.comment').not('.comment:last-child').remove();
+                    ajaxGetComments();
+                }
+                else { 
+                    openMenu();
+                }
+                
+                
+            });
+            
+            $( ".leave-group" ).click(function(event) {
+                event.preventDefault();
+                if(window.confirm("Are you sure you want to leave this group?")) {
+                    obj = {};
+                    group_key = window.location.pathname.split("/").slice(-1)[0];
+                    obj["csrf_token"] = $("input[name=dontCSRFme]").val();
+                    trigger_Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/groups/' + group_key + '/leave',
+                        data: obj,
+                        dataType: "json",
+                        timeout: 18000,
+                        success: function(result) {
+                            if(result["status"] == "ok") {
+                                location.reload();
+                                trigger_Loading();
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            console.log(xhr, ajaxOptions, thrownError);
+                            trigger_Loading();
+                        }
+                    });
+                }
+            });
+            
+            $( "#send-comment" ).click(function() {
+                obj = {};
+                obj["dontCSRFme"] = $('input[name=dontCSRFme]').val();
+                obj["comment_content"] = $('textarea[name=comment]').val();
+                if(obj["comment_content"]) {
+                    ajaxPostComment(obj);
+                }
+                
+            });
+            $( "#load-older" ).click(function() {
+                oldest = $('.comment:first').data("comment-key");
+                ajaxGetComments(oldest);
+            });
+            
+            var ajaxGetComments = function(oldest_comment) {
+                
+                group_key = window.location.pathname.split("/").slice(-1)[0];
+                params = ""
+                if(oldest_comment) {
+                    params = "?oldest=" + oldest_comment;
+                }
+                trigger_Loading();
+                $.ajax({
+                    type: 'GET',
+                    url: "/groups/" + group_key + '/getComments' + params,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result){
+                        if(params.length > 0) {
+                            handleCommentsResponse(result, true);
+                        }
+                        else {
+                            handleCommentsResponse(result);
+                        }
+                        trigger_Loading();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        trigger_Loading();
+                        console.log(xhr, ajaxOptions, thrownError);
+                    }
+                });
+            }
+            
+            var handleCommentsResponse = function(result, add_to_existing) {
+                html = '';
+                console.log(result);
+                template_string = '<div class="comment" data-comment-key="${ comment_key }"><img src="${ creator_pic }" alt="profile_picture_of_${ creator_name }_small" /><span>${ creator_name } wrote:</span><div class="comment-content">${ comment_content }</div></div><!-- end comment -->';
+                if(add_to_existing == true) {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:first').before(html);
+                    
+                }
+                else {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:last-child').before(html);
+                    openMenu();
+                }
+                if(result["comments"].length == 5){
+                    $("#load-older").css('display','block');
+                }
+                else {
+                    $("#load-older").css('display','none');
+                }
+                
+            }
+            
+            var ajaxPostComment = function(obj) {
+                console.log(obj);
+                group_key = window.location.pathname.split("/").slice(-1)[0];
+                trigger_Loading();
+                $.ajax({
+                    
+                    type: 'POST',
+                    url: '/groups/' + group_key + '/addComment',
+                    data: obj,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result) {
+                        if(result["status"] == "ok") {
+                            trigger_Loading();
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        trigger_Loading();
+                        console.log(xhr, ajaxOptions, thrownError);
+                    }
+                });
+                
+            }
+            
+            $( ".due" ).each(function() {
+                utc_string = $( this ).data( "utc-string" );
+                d = new Date(utc_string);
+                $(this).text(d.toLocaleDateString());
+            });
+            
+            $( ".join" ).click(function(event){
+                event.preventDefault();
+                if(window.confirm("Are you sure you want to join this group?")) {
+                    obj = {};
+                    group_key = window.location.pathname.split("/").slice(-1)[0];
+                    
+                    obj["csrf_token"] = $("input[name=dontCSRFme]").val();
+                    trigger_Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/groups/' + group_key + '/join',
+                        data: obj,
+                        dataType: "json",
+                        timeout: 18000,
+                        success: function(result) {
+                            trigger_Loading();
+                            if(result["msg"]) {
+                                alert(result["msg"]);
+                            }
+                            location.reload(); 
+                            
+                        },
+                        error: function (xhr, ajaxOptions, thrownError){
+                            trigger_Loading();
+                            console.log(xhr, ajaxOptions, thrownError);
+                        }
+                        
+                    }); 
+                    
+                }
+            });
+            
+            $(".signup-prompt").click(function(event){
+                event.preventDefault()
+                if(window.confirm("Sign in or create an account to proceed!")){
+                    window.location = "/" + "?redirect=" + document.URL;
+                }
+            });
+            
+            $(".share-this").click(function(event){
+                event.preventDefault();
+                toggleShareScreen();
+            });
+            
+            $(".close-button").click(function(event){
+                event.preventDefault();
+                toggleShareScreen();
+            });
+            
+            $(".url-input").click(function(event){
+                $(this).select();
+            });
+            
+            function toggleShareScreen(){
+                $("#share").toggleClass('hidden');
+                $("#ultraContainer").toggleClass('blur');
+            }     
+        </script>
+        <script type="text/javascript">
+            (function() {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+    </body>
+</html>

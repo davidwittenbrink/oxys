@@ -1,0 +1,27 @@
+.card {
+    padding: 4%;
+}
+
+.ref-url {
+    width: 52%;
+    margin-left: 4%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.ref-row span {
+    width: 10%;
+}
+
+select {
+    border-radius: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: 0 0;
+    width: 28%;
+    height: 30px !important;
+    background-color: #ececec;
+    border: none;
+}

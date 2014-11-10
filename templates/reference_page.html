@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_reference_page.css" />
+        <link href='https://fonts.googleapis.com/css?family=Rouge+Script|Mr+Dafoe|Tangerine|Clicker+Script' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <script src="/static/jquery.easing.1.3.js"></script>
+        <script src="/static/kul-substitute.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        
+        <title>Oxys Reference: {{ reference.name }}</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button"/>
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                
+                <div class="card reference-card">
+                    <a href="/topics/{{ topic.key.urlsafe() }}" class="back-to">Back to Topic</a>
+                    {% if can_delete %}
+                    <form method="post" id="delete-this">
+                        <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                        <a href="" class="delete" type="button">Delete</a>
+                    </form>
+                    {% endif %}
+                    <div class="ref-name">
+                        <h3 class="bigger-margin"><a href="{{ reference.url }}">{{ reference.name }}</a></h3>
+                    </div>
+                    
+                    <span>Created by: {{ creator_name }}</span>
+                    <br/>
+                    <span>Type: {{ reference.ref_type }}</span>
+                    <br/>
+                    <span>URL: <a href="{{ reference.url }}">{{ reference.url }}</a></span>
+                    <br/>
+                    {% if reference.description %}
+                    <span>Description:</span>
+                    <div class="card-text">
+                        <pre>{{ reference.description }}</pre>
+                    </div>
+                    {% endif %}
+                    
+                    
+                    <br/>
+                    <div class="plus-button">
+                        <span>Like (<span style="display: inline" class="like-count">{{ reference.up_votes }}</span>)</span>
+                    </div>
+                    <div class="minus-button">
+                        <span>Dislike (<span style="display: inline" class="dislike-count">{{ reference.down_votes }}</span>)</span>
+                        <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                    </div>
+                    <div class="comments">
+                        <button type="button" class="load-more-button load-comments">
+                            <img src="/static/graphics/Pfeilspitze.svg" alt="menu-button" />
+                            Load comments
+                        </button>
+                        <div class="hidden-content">
+                            <button id="load-older">Load older comments</button>
+                            <div class="comment">
+                                <img src="{{ user_profile_pic }}" alt="profile_picture_small" />
+                                <span>Add a comment:</span>
+                                <textarea name="comment"></textarea>
+                                <button id="send-comment">Send</button>
+                                
+                            </div><!-- end comment -->
+                        </div>
+                    </div>
+                </div><!-- end card -->
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            var openMenu = function() {
+                $( ".hidden-content" ).slideToggle( "slow", "easeInQuad", function() {
+                    // Animation complete.
+                });
+                $( ".hidden-content" ).toggleClass('opened');
+            }
+            
+            setWidthAsItemHeight("nav li");
+            
+            $( ".load-comments" ).click(function() {
+                if(! $( '.hidden-content' ).hasClass('opened')
+                   && $( ".comment" ).length == 1) {
+                    $('.comment').not('.comment:last-child').remove();
+                    ajaxGetComments();
+                }
+                else { 
+                    openMenu();
+                }
+                
+                
+            });
+            
+            $( "#send-comment" ).click(function() {
+                obj = {};
+                obj["dontCSRFme"] = $('input[name=dontCSRFme]').val();
+                obj["comment_content"] = $('textarea[name=comment]').val();
+                if(obj["comment_content"]) {
+                    ajaxPostComment(obj);
+                }
+                
+            });
+            $( "#load-older" ).click(function() {
+                oldest = $('.comment:first').data("comment-key");
+                ajaxGetComments(oldest);
+            });
+            
+            var ajaxGetComments = function(oldest_comment) {
+                reference_key = window.location.pathname.split("/").slice(-1)[0];
+                params = ""
+                if(oldest_comment) {
+                    params = "?oldest=" + oldest_comment;
+                }
+                trigger_Loading();
+                $.ajax({
+                    type: 'GET',
+                    url: "/references/" + reference_key + '/getComments' + params,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result){
+                        if(params.length > 0) {
+                            handleCommentsResponse(result, true);
+                        }
+                        else {
+                            handleCommentsResponse(result);
+                        }
+                        trigger_Loading();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+            }
+            
+            var handleCommentsResponse = function(result, add_to_existing) {
+                
+                html = '';
+                console.log(result);
+                template_string = '<div class="comment" data-comment-key="${ comment_key }"><img src="${ creator_pic }" alt="profile_picture_of_${ creator_name }_small" /><span>${ creator_name } wrote:</span><div class="comment-content">${ comment_content }</div></div><!-- end comment -->';
+                if(add_to_existing == true) {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:first').before(html);
+                }
+                else {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:last-child').before(html);
+                    openMenu();
+                }
+                if(result["comments"].length == 5){
+                    $("#load-older").css('display','block');
+                }
+                else {
+                    $("#load-older").css('display','none');
+                }
+                
+            }
+            
+            var ajaxPostComment = function(obj) {
+                console.log(obj);
+                reference_key = window.location.pathname.split("/").slice(-1)[0];
+                trigger_Loading();
+                $.ajax({
+                    
+                    type: 'POST',
+                    url: '/references/' + reference_key + '/addComment',
+                    data: obj,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result) {
+                        console.log(result);
+                        if(result["status"] == "ok") {
+                            location.reload();
+                            trigger_Loading();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+                
+            }
+            $( ".plus-button" ).click(function() {
+                changeVotes("up");
+            });
+            $( ".minus-button" ).click(function() {
+                changeVotes("down");
+            });
+            
+            var changeVotes = function(up_down) {
+                obj = {};
+                reference_key = window.location.pathname.split("/").slice(-1)[0];
+                obj["dontCSRFme"] = $('input[name=dontCSRFme]').val();
+                $.ajax({
+                    
+                    type: 'POST',
+                    url: '/references/' + reference_key + '/' + up_down,
+                    data: obj,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result) {
+                        if(result["status"] == "ok") {
+                            handleVoteResponse(result, up_down);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                    }
+                });
+            }
+            
+            var handleVoteResponse = function(result, up_down) {
+                if(result["prev"] == 'down') {
+                    $('.like-count').html(parseInt($( '.like-count' ).html()) + 1);
+                    $('.dislike-count').html(parseInt($( '.dislike-count' ).html()) - 1);
+                }
+                else if(result["prev"] == 'up') {
+                    $('.like-count').html(parseInt($( '.like-count' ).html()) - 1);
+                    $('.dislike-count').html(parseInt($( '.dislike-count' ).html()) + 1);
+                }
+                    else if(result["msg"] == "remove up-vote") {
+                        $('.like-count').html(parseInt($( '.like-count' ).html()) - 1);
+                    }
+                        else if(result["msg"] == "remove down-vote") {
+                            $('.dislike-count').html(parseInt($( '.dislike-count' ).html()) - 1);
+                        }
+                            else if(up_down == 'up') {
+                                $('.like-count').html(parseInt($( '.like-count' ).html()) + 1);
+                            }
+                
+                                else {
+                                    $('.dislike-count').html(parseInt($( '.dislike-count' ).html()) + 1);
+                                }
+                
+            }
+            //////GROW TEXTAREA
+            $(function() {
+                $('textarea').autogrow();
+            });
+            
+            $('.delete').click(function(event){
+                event.preventDefault();
+                if(window.confirm("Are you sure you want to delete this Reference?")){
+                    $('#delete-this').submit(); 
+                }
+            });
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+<html>
+    <!DOCTYPE html>
+    <html lang="en" id="doc" class="js">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>            <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+            <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+            <script src="/static/jquery.js"></script>
+            <title>Oxys</title>
+        </head>
+        <style>
+            #header {position: static;}
+            input {
+                height: 30px;
+                border: 0;
+                background-color: #ececec;
+                font-family: inherit;
+                font-weight: 300;
+                font-size: 1em;
+            }
+        </style>
+        <body>
+            <div id="header">	
+                <div id="logo">
+                    <a href="/"><h1>Oxys</h1></a>
+                </div>
+            </div> <!--end header -->
+            <div class="card">
+            <form id="create-account" method="post">
+                <h2>Create an account:</h2>
+                <div><div>Forename:</div>
+                <input name="forename" placeholder="Max"/>
+                <span class="error">Did you enter a valid forename?</span>
+                </div>
+                <div><div>Surname:</div>
+                <input name="surname" placeholder="Musterman"/>
+                <span class="error">Did you enter a valid surname?</span>
+                </div>
+                <div><div>Your email:</div>
+                <input type="email" name="email" placeholder="max@musterman.com"/>
+                <span class="error">Did you enter a valid email address?</span>
+                </div>
+                <div><div>Your password:</div>
+                <input type="password"  name="password"/>
+                </div>
+                <div><div>Confirm your password:</div>
+                <input type="password" name="confirm_password"/>
+                <span class="error">Did you enter passwords and are they both the same? Your password has to be at least 6 characters long.</span>
+                </div>
+                <label><input name="gender" value="male" type="radio">Male</label>
+                <label><input name="gender" value="female" type="radio">Female</label>
+                <span class="error gender-error">Please specify your gender!</span>
+                
+                <br/>
+                <button type="button" id="create-button" >Submit</button>
+            </form>
+            <form id="sign-in-form" method="post">
+                <h2>Sign in:</h2>
+                <div><div>Your email:</div>
+                <input type="email" name="sign-in-email"/>
+                </div>
+                <div><div>Your password:</div>
+                <input type="password"  name="sign-in-password"/>
+                </div>
+                <button id="login-button" type="button">Submit</button>
+            </form>
+            </div> <!-- end card -->
+        </body>
+        <script>
+            $("#create-button").click(function(){
+                
+                $(".error").each(function(){
+                    $( this ).css('display', 'none');
+                });
+                
+                if($("input[name=forename]").val().length < 2 ){
+                    $("input[name=forename]").next().css("display", "block");
+                }
+                if($("input[name=surname]").val().length < 2 ){
+                    $("input[name=surname]").next().css("display", "block");
+                }
+                if($("input[name=email]").val().length < 2 ){
+                    $("input[name=email]").next().css("display", "block");
+                }
+                if(($("input[name=password]").val().length < 7) ||
+                   $("input[name=password]").val() != $("input[name=confirm_password]").val()){
+                    $("input[name=confirm_password]").next().css("display", "block");
+                }
+                if(! $('input[name=gender]').is(':checked')) { 
+                    $('.gender-error').css("display", "block"); 
+                }
+                
+                submitable = true;
+                
+                $(".error").each(function(){
+                    if($( this ).css("display") != "none") {
+                        submitable = false;
+                    }
+                });
+                
+                if(submitable){
+                    sendToServer("#create-account", "/signup");
+                }
+            });
+            
+            $("#login-button").click(function(){
+                sendToServer("#sign-in-form", "/emailSignIn");
+            });
+            var sendToServer = function(form, url) {
+                obj = createFormData(form);
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: obj,
+                    dataType: "JSON",
+                    success: function(response){
+                        if(response["status"] != "error") {
+                            console.log("succesful registration");
+                        }
+                        else {
+                            alert(response["msg"]);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                    }
+                });
+            }
+            
+            function createFormData(form) {
+                //Creates Form Data. If multiple elements have the same
+                //name it will create an entry like: name : "value1|value2"
+                var obj={}
+                
+                var s = $(form).serializeArray();
+                for(i=0; i<s.length; i++) {
+                    
+                    obj[s[i]["name"]] = s[i]["value"];
+                }
+                console.log(obj);
+                return obj;
+            }
+            
+        </script>
+    </html>

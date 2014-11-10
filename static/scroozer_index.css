@@ -1,0 +1,30 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    background-color: #e89322;
+    margin: 0 0;
+}
+
+#header {
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+    font-family: 'Bilbo Swash Caps', cursive;
+    background-color: ;
+    color: white;
+}
+#header h1 {
+    margin: 0%;
+}
+
+.card {
+    margin: 4% 2%;
+    padding: 1% 2%;
+    background-color: white;
+    height: 350px;
+}
+
+input {
+    -webkit-appearance: none;
+    border-radius: 0;
+}

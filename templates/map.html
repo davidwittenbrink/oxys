@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css" />
+        <title>Oxys: Top 10 Schools</title>
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <meta property="og:site_name" content="Oxys" />
+        <meta property="og:title" content="Top 10 Schools" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://gcdc2013-oxys.appspot.com/map" />
+        <meta property="og:image" content="https://gcdc2013-oxys.appspot.com/static/images/og-logo.png" />
+        <meta property="og:description" content="View the Top 10 Schools at Oxys" />
+        
+        <style type="text/css">
+            
+        </style>
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHdEH0R11cb8y8-y8mDPrS2pPk2oM1DOM&sensor=false">
+        </script>
+        <script type="text/javascript">
+            MARKERS = [];
+            LATEST_OPENED = 0;
+            function initialize() {
+                
+                var mapOptions = {
+                    center: new google.maps.LatLng(47.070714, 15.439504),
+                    zoom: 2,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(document.getElementById("map-canvas"),
+                                              mapOptions);                
+                {% for school in schools %}
+                var {{ school[1] }}_Latlng = new google.maps.LatLng({{ school[0].coordinates.lat }},{{ school[0].coordinates.lon }});
+                 var {{ school[1] }}_marker = new google.maps.Marker({
+                     position: {{ school[1] }}_Latlng,
+                                                                     map: map,
+                                                                     animation: google.maps.Animation.DROP,
+                                                                     title:"{{school[0].name}}"
+                                                                     });
+                 google.maps.event.addListener({{ school[1] }}_marker, 'click', function() {
+                     {{ school[1] }}_info_window = new google.maps.InfoWindow({
+                         content: "<div>{% if school[0].places_url %}<a href='{{ school[0].places_url }}'>{{ school[0].name }}</a>{% else %}{{ school[0].name }}{% endif %}<br/>{{ school[0].num_groups }} Groups<br/>{{ school[0].num_authorized }} Authorized Groups<br/>"
+                     })
+                     if(LATEST_OPENED) {
+                         LATEST_OPENED.close();
+                     }
+                     LATEST_OPENED = {{ school[1] }}_info_window;
+                 {{ school[1] }}_info_window.open(map,{{school[1]}}_marker);
+                });
+                MARKERS.push({{ school[1] }}_marker);
+                {% endfor %}
+                
+                }
+                
+                function showSchool(marker) {
+                    google.maps.event.trigger(marker, "click");
+                }
+                
+                google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <style>
+            h1 {text-align: center;
+                font-family: 'Rouge Script', cursive;
+                color: #e99322;
+                font-size: 5.8em;
+                margin-bottom: 30px;}
+            h1 a {text-decoration: none; color: inherit;}
+            html { height: 100% }
+            body { padding: 0; margin: 0; height: 100%; background-color: #f7f7f7; font-family: Open Sans;font-weight: 300;}
+            h2 {font-weight: 400; text-align: center;}
+            
+            #content-wrapper {width: 100%; max-width: 800px; margin: 0 auto;}
+            #map-canvas { height: 400px; width: 100%;}
+            table {width: 100%; text-align: center;}
+            th {font-weight: 400; height: 50px;}
+            .bold {font-weight: 400}
+            td a {color: #e99322;}
+            h3 {font-weight: 400; text-align: center; font-size: 1em; margin-top: 60px; margin-bottom: 40px;}
+            #top-ten {max-width: 592px;
+                margin-left: auto;
+                margin-right: auto;}
+            h3 a {color: #e99322;}
+            input {
+                border-radius: 0;
+            }
+            @media all and (max-width: 455px) {
+                h1 {margin-top: 8%;}
+            
+        }
+        </style>
+    </head>
+    <body>
+        <div id="content-wrapper">
+            <h1 class="index-logo"><a href="/">Oxys</a></h1>
+            <div id="map-canvas"></div>
+            <h2>Top 10 Schools</h2>
+        </div>
+        <div id="top-ten">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Groups</th>
+                    <th>Authorized Groups</th>
+                </tr>
+                {% for school in schools %}
+                <tr>
+                    <td class="bold">
+                        {{school[2]}}
+                    </td>
+                    <td><a href="javascript:showSchool(MARKERS[{{ loop.index0 }}])">{{ school[0].name }}</a></td>
+                    <td>{{ school[0].num_groups }}</td>
+                    <td>{{ school[0].num_authorized }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <h3>Your School is not in the list? <a href="/">Sign up</a> and do something about it!</h3>
+    </body>
+</html>

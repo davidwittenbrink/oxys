@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css' />
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/static/index.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <meta property="og:site_name" content="Oxys" />
+        <meta property="og:title" content="Welcome!" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://gcdc2013-oxys.appspot.com" />
+        <meta property="og:image" content="https://gcdc2013-oxys.appspot.com/static/images/og-logo.png" />
+        <meta property="og:description" content="We make it easy for you to organize your school life so you can concentrate on the important part: learning. Create Groups, invite your teachers or classmates and start adding events, tasks and topics." />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/fb_g_auth.js"></script>
+        <script src="/static/jquery.easing.1.3.js"></script>
+        <title>Welcome to Oxys</title>
+        <style>
+            
+            
+        </style>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <div class="auth-window">
+            <button class="auth-close-button" type="button" alt="close">X</button>
+            <div class="sign-in-wrapper">
+                If you are an official of your school, write us an email to be able to authorize Groups created by your teachers:
+                <a href="mailto:authorize.scroozer@gmail.com">authorize.scroozer@gmail.com</a>
+            </div>
+        </div><!-- end sign-in-window -->
+        
+        <div id="content-wrapper">
+            <div id="top-menu">
+                <a class="top-link" href="/map">Top 10 Schools</a>
+                <a class="top-link authorize" href="/authorize">I want to authorize a School</a>
+            </div>
+            <h1 class="index-logo">Oxys</h1>
+            <div class="intro-text">
+                We make it easy for you to organize your school life so you can concentrate on the important part: <span class="learning">learning.</span><br/> Create Groups, 
+                invite your teachers or classmates and start adding events, tasks and topics.
+            </div>
+            <div id="social-buttons">
+                <div class="sign-in-with">Register using:</div>
+                <div id="g-signin-button">
+                    <div id="gSignInWrapper">
+                        <div id="customBtn" class="customGPlusSignIn">
+                            <span class="icon"></span>
+                            <span class="buttonText">Google</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="fb-signin-button">
+                    <fb:login-button size="large" scope="email">
+                        <span style="display: none">Facebook</span>
+                    </fb:login-button>
+                </div>
+            </div>
+            <div id="email-signup">
+                <div style="text-align: center; font-weight: 400;">or</div>
+                <button class="email-button" type="button">Email</button>
+                <div id="email-hidden">
+                    <form id="create-account" method="post">
+                        <div>
+                            <label>
+                                <div class="hidden">Given name</div>
+                                <input class="text-input" name="forename" placeholder="Given name"/>
+                                <span class="error">Did you enter a valid first name?</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <div class="hidden">Family name</div>
+                                <input class="text-input" name="surname" placeholder="Family name"/>
+                                <span class="error">Did you enter a valid family name?</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <div class="hidden">Email</div>
+                                <input class="text-input" type="email" name="email" placeholder="Email"/>
+                                <span class="error">Did you enter a valid email address?</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <div class="hidden">Password</div>
+                                <input class="text-input" type="password" placeholder="Password" name="password"/>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <div class="hidden">Confirm password</div>
+                                <input class="text-input" type="password" placeholder="Confirm password" name="confirm_password"/>
+                                <span class="error">Did you enter passwords and are they both the same? Your password has to be at least 6 characters long.</span>
+                            </label>
+                        </div>
+                        <label>
+                            <div class="hidden">Your gender</div>
+                            <label><input name="gender" value="male" type="radio"><span class="gender-string">Male</span></label>
+                            <label><input name="gender" value="female" type="radio"><span class="gender-string">Female</span></label>
+                            <span class="error gender-error">Please specify your gender!</span>
+                        </label>
+                        
+                        <br/>
+                        <button alt="create-account" type="button" id="create-button" >Submit</button>
+                        
+                    </form>
+                    
+                </div>
+                
+            </div>
+            <a href="#" class="got-account">Already got an account?</a>
+            
+        </div><!-- end content-wrapper -->
+        <div class="sign-in-window">
+            <button class="close-button" type="button" alt="close">X</button>
+            <div class="sign-in-wrapper">
+                <div id="social-buttons">
+                    <div class="sign-in-with">Sign in using:</div>
+                    <div id="g-signin-button">
+                        <div id="second-gSignInWrapper">
+                            <div id="customBtn" class="customGPlusSignIn">
+                                <span class="icon"></span>
+                                <span class="buttonText">Google</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="fb-signin-button">
+                        <fb:login-button size="large" scope="email">
+                            <span style="display: none">Facebook</span>
+                        </fb:login-button>
+                    </div>
+                </div>
+                <form id="sign-in-form" method="post">
+                    <div>
+                        <label>
+                            <div class="hidden">Your Email:</div>
+                            <input class="text-input grey first" type="email" placeholder="Email" name="sign-in-email"/>
+                            <span class="error sign-in-error">Please enter a valid email address!</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <div class="hidden">Your Password:</div>
+                            <input class="text-input grey" type="password" placeholder="Password" name="sign-in-password"/>
+                            <span class="error sign-in-error">Please enter a valid password!</span>
+                        </label>
+                    </div>
+                    <button id="login-button" type="button">Login</button>
+                </form>
+            </div>
+        </div><!-- end sign-in-window -->
+        <script>
+            $(".email-button").click(function(){
+                $( "#email-hidden" ).slideToggle( "slow", "easeInQuad", function() {
+                    // Animation complete.
+                });
+                $( ".email-button" ).toggleClass('opened');
+            });
+            
+            $("#create-button").click(function(){
+                
+                $(".error").each(function(){
+                    $( this ).css('display', 'none');
+                });
+                
+                if($("input[name=forename]").val().length < 2 ){
+                    $("input[name=forename]").next().css("display", "block");
+                }
+                if($("input[name=surname]").val().length < 2 ){
+                    $("input[name=surname]").next().css("display", "block");
+                }
+                if($("input[name=email]").val().length < 2 ){
+                    $("input[name=email]").next().css("display", "block");
+                }
+                if(($("input[name=password]").val().length < 7) ||
+                   $("input[name=password]").val() != $("input[name=confirm_password]").val()){
+                    $("input[name=confirm_password]").next().css("display", "block");
+                }
+                if(! $('input[name=gender]').is(':checked')) { 
+                    $('.gender-error').css("display", "block"); 
+                }
+                
+                submitable = true;
+                
+                $(".error").each(function(){
+                    if($( this ).css("display") != "none") {
+                        submitable = false;
+                    }
+                });
+                
+                if(submitable){
+                    sendToServer("#create-account", "/signup");
+                }
+                
+                
+            });
+            var sendToServer = function(form, url, reload) {
+                obj = createFormData(form);
+                trigger_Loading();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: obj,
+                    dataType: "JSON",
+                    success: function(response){
+                        console.log(response);
+                        console.log(response["status"]);
+                        if(response["status"] == "ok" && !(reload)) {
+                            trigger_Loading();
+                            alert("Confirm your email address by opening the link we've sent to you and you're good to go.");
+                        }
+                        else if(response["status"] == "ok" && reload){
+                            trigger_Loading();
+                            window.location = '/'
+                        }
+                            else {
+                                trigger_Loading();
+                                alert(response["msg"]);
+                            }
+                        
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+            }
+            
+            function createFormData(form) {
+                //Creates Form Data. If multiple elements have the same
+                //name it will create an entry like: name : "value1|value2"
+                var obj={}
+                
+                var s = $(form).serializeArray();
+                for(i=0; i<s.length; i++) {
+                    
+                    obj[s[i]["name"]] = s[i]["value"];
+                }
+                console.log(obj);
+                return obj;
+            }
+            $(".got-account").click(function(){
+                toggleSignInWindow(); 
+            });
+            $(".close-button").click(function(){
+                toggleSignInWindow(); 
+            });
+            $(".authorize").click(function(event){
+                event.preventDefault();
+                toggleAuthWindow(); 
+            });
+            $(".auth-close-button").click(function(){
+                toggleAuthWindow(); 
+            });
+            
+            function toggleSignInWindow() {
+                if($(".auth-window").css("display") == "none"){
+                    $("#content-wrapper").toggleClass('blur');
+                    $(".sign-in-window").toggle();  
+                }
+            }
+            function toggleAuthWindow() {
+                if($(".sign-in-window").css("display") == "none"){
+                    $("#content-wrapper").toggleClass('blur');
+                    $(".auth-window").toggle();  
+                }
+            }
+            $("#login-button").click(function(){
+                if($("input[name=sign-in-email]").val() && $("input[name=sign-in-password]").val())
+                    sendToServer("#sign-in-form", "/emailSignIn", true);
+                else {
+                    if(! $("input[name=sign-in-email]").val())
+                        $("input[name=sign-in-email]").next().css("display", "block");
+                    if(! $("input[name=sign-in-password]").val())
+                        $("input[name=sign-in-password]").next().css("display", "block");
+                }
+            });
+            $( ".sign-in-window" ).keypress(function(event) {
+                if(event.which == 13)
+                    $("#login-button").click();
+            });
+            
+            $( "#email-hidden" ).keypress(function(event) {
+                if(event.which == 13)
+                    $("#create-button").click();
+            });
+            
+            function render() {
+                gapi.signin.render("gSignInWrapper", { 
+                    'callback': signinCallback, 
+                    'clientid': '420752190781.apps.googleusercontent.com', 
+                    'cookiepolicy': 'https://gcdc2013-oxys.appspot.com/', 
+                    'scope': 'https://www.googleapis.com/auth/userinfo.email'
+                });
+            }
+            $("#second-gSignInWrapper").click(function(){$("#gSignInWrapper").click();})
+            
+            
+        </script>
+    </body>
+</html>

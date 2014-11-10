@@ -1,0 +1,27 @@
+pre {margin: 0 0 }
+
+.topic, .one-group {
+    margin: 2% 0;
+    background-color: #ececec;
+    padding: 2%;
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.topic-headline, .group-headline {
+    color: #e99322;
+    font-weight: 400;
+    margin: 1% 0;
+}
+
+.topic-description, .group-description {
+    font-size: 0.9em;
+    margin-left: 4%;
+}
+
+.topic-posted-in {
+    width: 100%;
+    font-size: 0.7em;
+    text-align: right;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/view_all.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button">
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                {% if (admin_groups or member_groups) %}
+                {% if admin_groups %}
+                <div class="card">
+                    <h3>Groups you administer:</h3>
+                    {% for group in admin_groups %}
+                    {%if group%}
+                    <a href="/groups/{{ group.key.urlsafe() }}" class="one-group">
+                        <div class="group-headline">
+                            {{ group.name }}
+                        </div>
+                        <div class="group-description">
+                            <div>{{ group.description }}</div>
+                        </div>
+                    </a>
+                    {%endif%}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if member_groups %}
+                <div class="card">
+                    <h3>Groups that you're a Member of:</h3>
+                    {% for group in member_groups %}
+                    {%if group%}
+                    <a href="/groups/{{ group.key.urlsafe() }}" class="one-group">
+                        <div class="group-headline">
+                            {{ group.name }}
+                        </div>
+                        <div class="group-description">
+                            <div>{{ group.description }}</div>
+                        </div>
+                    </a>
+                    {%endif%}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="card">
+                    <h2 class="center-h2">You are in no Groups yet. Why not <a href="/createGroup">create one</a>?</h2>
+                </div>
+                {% endif %}
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            $( ".due" ).each(function() {
+                utc_string = $( this ).data( "utc-string" );
+                d = new Date(utc_string);
+                $(this).text(d.toLocaleDateString());
+            });
+        </script>
+    </body>
+</html>

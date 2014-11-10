@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/topic_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/scroozer_reference_page.css" />
+        <meta property="og:site_name" content="Oxys" />
+        <meta property="og:title" content="{{ topic.name }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ url }}" />
+        <meta property="og:image" content="https://gcdc2013-oxys.appspot.com/static/images/og-logo.png" />
+        <meta property="og:description" content="{% if meta_topic_description %}meta_topic_description{% else %}Oxys Topic{%endif%}" />
+        <meta property="fb:app_id" content="605822282815813" />
+        {% if not topic.is_public %}<meta name="robots" content="noindex, follow"> {% endif %}
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <script src="/static/kul-substitute.js"></script>
+        
+        
+        <title>Oxys Topic: {{ topic.name }}</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+               
+        <div id="header">
+            {% if is_logged_in %}
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button">
+            </a>
+            {% endif %}
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+            
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            
+            <nav id ="menu" role="navigation">
+                {% if is_logged_in %}
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+                {% endif %}
+            </nav>
+            
+            
+            <section role="main">
+                <div class="card">
+                    <div id="topic-name-headline">
+                        <h2>Topic: {{ topic.name }}</h2>
+                    </div>
+                    <div id="fb-like">
+                        <div class="fb-like" data-href="http://google-app-engine-30339.euw1.actionbox.io:3000/topics/{{ topic.key.urlsafe() }}" data-width="300" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+                    </div>
+                        <div id="g-plus-one">
+                        <div class="g-plusone" data-size="medium"></div>
+                    </div>
+                </div><!-- end card-->
+                {% if topic.description %}
+                <div class="card">
+                    <h3>About this topic:</h3>
+                    <div class="card-text">
+                        <p>
+                            {{ topic.description }}
+                        </p>
+                    </div>
+                </div><!-- end card -->
+                {% endif %}
+                <div class="card">
+                    <h3>Topic actions:</h3>
+                    {% if is_logged_in %}<a class="action" href="/topics/{{ topic.key.urlsafe() }}/addToGroups"><button>Add to Groups</button></a>{% endif %}
+                    <a class="action{% if not is_logged_in %} signup-prompt {% endif %}" href="/topics/{{ topic.key.urlsafe() }}/add"><button>Add a Reference</button></a>
+                    {% if user_key == topic.creator or user_key in topic.admins %}
+                    <a class="action" href="/topics/{{ topic.key.urlsafe() }}/topicSettings"><button>Topic Settings</button></a>
+                    {% endif %}
+                </div><!-- end card -->
+                
+                {% if admin_references %}
+                <div class="card">
+                    <h3>References by Admins:</h3>
+                    <ul class="references">
+                        {% for ref in admin_references %}
+                        <li>
+                            <a href="/topics/{{ topic.key.urlsafe() }}/references/{{ ref.key.urlsafe() }}">
+                                <span class="reference-name">{{ ref.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                        
+                    </ul>
+                    {% if admin_references|length >= 5 %}
+                    <a href="/topics/{{ topic.key.urlsafe() }}/viewAdminRefs"><button type="button" class="view-all">View all</button></a>
+                    {% endif %}
+                </div><!--end card -->
+                {% endif %}
+                {% if member_references %}
+                <div class="card">
+                    <h3>References by Members:</h3>
+                    <ul class="references">
+                        {% for ref in member_references %}
+                        <li>
+                            <a href="/topics/{{ topic.key.urlsafe() }}/references/{{ ref.key.urlsafe() }}">
+                                <span class="reference-name">{{ ref.name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if member_references|length >= 5 %}
+                    <a href="/topics/{{ topic.key.urlsafe() }}/viewMemberRefs"><button type="button" class="view-all">View all</button></a>
+                    {% endif %}
+                </div><!-- end card -->
+                {% endif %}
+                <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}">
+                {% if is_logged_in %}
+                <div class="card">
+                    <div class="comments">
+                        <button type="button" class="load-more-button load-comments">
+                            <img src="/static/graphics/Pfeilspitze.svg" alt="menu-button" />
+                            Posts in this Topic
+                        </button>
+                        <div class="hidden-content">
+                            <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                            <button id="load-older">Load older posts</button>
+                            <div class="comment">
+                                <img src="{{ user_profile_pic }}" alt="profile_picture_small" />
+                                <span>Post something:</span>
+                                <textarea name="comment"></textarea>
+                                <button id="send-comment">Send</button>
+                            </div><!-- end comment -->
+                        </div>
+                    </div>
+                </div><!-- end card -->
+               {% endif %}
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            var openMenu = function() {
+                $( ".hidden-content" ).slideToggle( "slow", function() {
+                    // Animation complete.
+                });
+                $( ".hidden-content" ).toggleClass('opened');
+            }
+            
+            setWidthAsItemHeight("nav li");
+            
+            $( ".load-comments" ).click(function() {
+                if(! $( '.hidden-content' ).hasClass('opened')
+                   && $( ".comment" ).length == 1) {
+                    $('.comment').not('.comment:last-child').remove();
+                    ajaxGetComments();
+                }
+                else { 
+                    openMenu();
+                }
+                
+                
+            });
+            
+            $( "#send-comment" ).click(function() {
+                obj = {};
+                obj["dontCSRFme"] = $('input[name=dontCSRFme]').val();
+                obj["comment_content"] = $('textarea[name=comment]').val();
+                if(obj["comment_content"]) {
+                    ajaxPostComment(obj);
+                }
+                
+            });
+            $( "#load-older" ).click(function() {
+                oldest = $('.comment:first').data("comment-key");
+                ajaxGetComments(oldest);
+            });
+            
+            var ajaxGetComments = function(oldest_comment) {
+                
+                topic_key = window.location.pathname.split("/").slice(-1)[0];
+                params = ""
+                if(oldest_comment) {
+                    params = "?oldest=" + oldest_comment;
+                }
+                trigger_Loading();
+                $.ajax({
+                    type: 'GET',
+                    url: "/topics/" + topic_key + '/getComments' + params,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result){
+                        if(params.length > 0) {
+                            handleCommentsResponse(result, true);
+                        }
+                        else {
+                            handleCommentsResponse(result);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+            }
+            
+            var handleCommentsResponse = function(result, add_to_existing) {
+                html = '';
+                console.log(result);
+                template_string = '<div class="comment" data-comment-key="${ comment_key }"><img src="${ creator_pic }" alt="profile_picture_of_${ creator_name }_small" /><span>${ creator_name } wrote:</span><div class="comment-content">${ comment_content }</div></div><!-- end comment -->';
+                if(add_to_existing == true) {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:first').before(html);
+                    
+                }
+                else {
+                    for(i=0; i < result["comments"].length; i++) {
+                        html += $.substitute(template_string, result["comments"][i]);
+                    }
+                    $('.comment:last-child').before(html);
+                    openMenu();
+                }
+                if(result["comments"].length == 5){
+                    $("#load-older").css('display','block');
+                }
+                else {
+                    $("#load-older").css('display','none');
+                }
+                trigger_Loading();
+            }
+            
+            var ajaxPostComment = function(obj) {
+                topic_key = window.location.pathname.split("/").slice(-1)[0];
+                trigger_Loading();
+                $.ajax({
+                    
+                    type: 'POST',
+                    url: '/topics/' + topic_key + '/addComment',
+                    data: obj,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result) {
+                        if(result["status"] == "ok") {
+                            trigger_Loading();
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+                
+            }
+            
+            $(".signup-prompt").click(function(event){
+                event.preventDefault()
+                if(window.confirm("Sign in or create an account to proceed!")){
+                    window.location = "/" + "?redirect=" + document.URL;
+                }
+            });
+            
+        </script>
+        <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+    </body>
+</html>

@@ -1,0 +1,225 @@
+input, input[type=search] {
+    border-radius: 0 !important;
+    margin-right: 0;
+}
+input[type=search] {
+-webkit-appearance: none;
+}
+
+input[type="text"], input[type=search] {
+   -moz-box-sizing:    border-box;
+   -webkit-box-sizing: border-box;
+    box-sizing:        border-box;
+}
+
+ 
+
+#school-search-results {
+    margin: 3% 0;
+}
+
+.submit {
+    border: none;
+    height: 30px;
+    margin-top: 4%;
+    width: 20%;
+    cursor: pointer;
+}
+
+.topic {
+    width: 49%;
+    display: inline-block;
+}
+
+.user-created-topics {
+    padding-left: 4%;
+}
+
+input[type=number]{
+    width: 30px;
+    margin-left: 4%;
+}
+.checkbox-row {
+    margin-top: 5%;
+}
+
+.loading {
+    width: 100%;
+    text-align: center;
+}
+
+.search-field, .search-button {
+    box-sizing: content-box; -moz-box-sizing: content-box; -ms-box-sizing: content-box;
+}
+
+.search-button {
+    height: 30px;
+    border: none;
+    background-color: #ececec;
+    width: 13%;
+    margin: 0 0;
+}
+
+
+
+.search-result {
+    margin: 2% 0;
+    background-color: #ececec;
+    padding: 4%;
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.search-headline {
+    color: #e99322;
+    font-weight: 400;
+    margin: 1% 0;
+}
+
+.search-description {
+    font-size: 0.9em;
+    margin-left: 4%;
+}
+
+.search-posted-in {
+    width: 100%;
+    font-size: 0.7em;
+    text-align: right;
+}
+
+h2 {
+    font-weight: inherit;
+    font-size: 1.2em;
+}
+
+.search-field {
+    width: 75% !important;
+}
+
+.hidden {display: none}
+.card {
+    padding: 0 0;
+}
+
+#search-topic-link, #add-topic-link,
+#add-task-link, #add-event-link {
+    width: 50%;
+    height: 50px;
+    margin-bottom: 4%;
+}
+
+.passive {
+    background-color: #ececec !important;
+}
+
+#search-topic-link button, #add-topic-link button,
+#add-event-link button, #add-task-link button,
+.hidden-menu button, .group-submit-button,
+.topic-submit-button, .event-submit-button,
+.task-submit-button, .reference-submit-button {
+    background: white;
+    border: 0;
+    padding: 0 0;
+    margin: 0 0;
+    text-align: center;
+    display: block;
+    height: 100%;
+    width: 100%;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow:    none;
+    box-shadow:         none;
+    outline: 0;
+    cursor: pointer;
+    font-size: 1.0em;
+}
+
+#search-topic-link, #add-event-link {
+    float: left;
+}
+
+#add-topic-link, #add-task-link {
+    float: right;
+}
+
+#search-topic-tab-content, #add-topic-tab-content,
+#add-event-tab-content, #add-task-tab-content, #add-group-content {
+    padding: 4%;
+}
+
+.row {
+    width: 100%;
+    margin-bottom: 9%;
+    margin-top: 9%;
+}
+
+.input-field, .row textarea {
+    width: 100%;
+    height: 30px;
+    border: 0;
+    background-color: #ececec;
+    margin-top: 4%;
+    font-family: inherit;
+    font-weight: 300;
+    font-size: 1em;
+}
+
+.row textarea {
+    resize: none;
+    
+}
+
+.explanation {
+    float: right;
+    font-size: 0.7em;
+    color: #787878;
+}
+
+.hidden-menu button {
+    height: 50px;
+    background-color: #ececec;
+    text-align: left;
+    padding-left: 2%; 
+}
+
+.hidden-menu-button img {
+    height: 20px;
+    float: right;
+    margin-right: 20px;
+}
+
+.hidden-menu-content {
+    display: none;
+    border-top: 1px solid #AAAAAA;
+    padding: 3%;
+    background-color: #ececec;
+}
+
+.hidden-menu-content input {
+    background-color: white;
+}
+
+.hidden-menu {
+    margin: 2.5% 0
+}
+
+#add-topic-tab-content, #add-task-tab-content {
+    display: none;
+}
+
+.group-submit-button, .topic-submit-button,
+.event-submit-button, .task-submit-button,
+.reference-submit-button {
+    background-color: #ececec;
+    height: 50px;
+}
+
+.school-search {
+    width: 100% !important;
+    background-color: white !important;
+    text-align: center !important;
+}
+}

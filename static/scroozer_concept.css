@@ -1,0 +1,437 @@
+input, textarea {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+@media all and (min-width: 1647px) {
+    #nav {margin-left: 200px !important;}
+
+}
+
+@media all and (min-width: 600px) and (max-width: 771px)  {
+    
+    #nav {position: static !important;}
+#nav li a {padding: 0 0 !important;}
+#nav li a div {display: none;}
+}
+
+@media all and (max-height: 400px) and (min-width: 600px) {
+    
+    #nav {position: static !important;}
+}
+
+@media all and (min-width: 600px) {	
+    .js [role="navigation"] {
+        width: 19%;
+        margin-left: 0 !important;
+        float: left;
+        padding: 3%;
+        padding-top: 0 !important;
+        
+                
+    }
+
+.js [role="main"] {
+    width: 44%;
+    padding: 3%;
+    padding-top: 0;
+    margin-top: 59px !important;
+
+}
+
+.menu-button { 
+    display: none;
+}
+.menu-button {display: none !important;}
+
+.card {
+    min-width: 396px !important;
+}
+
+#nav {
+    min-width: 60px;
+    margin-top: 70px !important;
+    max-width: 200px;
+}
+
+#nav li {
+    min-width: 70px;
+}
+#nav li a img {
+    max-width: 72px; 
+    max-height: 72px;
+}
+#nav li a div {
+    max-height: 30px; 
+    overflow: hidden;
+}
+
+}
+
+body {height: 112%}
+
+#nav li a {
+    color: #C2C2C2;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 0.8em;
+    padding: 10%;
+    padding-top: 6%;}
+#nav li a div {
+    margin-top: -8%;}
+#nav li a img {
+    width: 95%;}
+
+.welcome-message {
+    line-height: 1.6em;
+    padding: 4% !important;
+    margin-top: 4%;
+}
+
+.welcome-message a {
+    color: #e99322;
+}
+
+.logo-in-card {
+    font-family: 'Bilbo Swash Caps', cursive;
+    font-weight: bold;
+    color: #e99322;
+    font-size: 30px;
+}
+
+.delete-button {
+    height: 30px;
+    border: none;
+    background-color: #ececec;
+}
+
+.back-to, .delete {
+    font-size: 0.8em;
+    color: #787878;
+    display: inline;
+}
+.back-to {
+    float: left;
+}
+
+.delete {
+    float: right;
+}
+pre {
+    font-size: inherit;
+    font-family: inherit;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.groups, .admin-topics {
+    background-color: #ececec;
+    padding: 2%;
+    margin: 0 5%;
+    background-color: #ececec;
+    list-style: none;
+}
+
+.groups li, .admin-topics li {
+    min-height: 30px !important;
+    border-bottom: 1px solid grey;
+    font-size: 1em;
+}
+.groups li a, .admin-topics li a {
+    margin-top: 6px;
+    display: block;
+    text-decoration: none;
+    color: #e99322;
+    height: 100%;
+    
+}
+.groups li:last-child, .admin-topics li:last-child {
+    border-bottom: none;
+}
+
+
+body {
+    width: 100%;
+    margin: 0 0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    background-color: #e5e5e5;
+}
+
+.arrow {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.month-left {
+    float: left;
+}
+
+.month-right{
+    float: right;
+}
+
+#header {
+    background-color: #e89322;
+    height: 52px;
+    width: 100%;
+    position: fixed;
+    z-index: 9999999;
+}
+
+#logo a {
+    display: block;
+    width: 60px;
+    margin-right: auto;
+    margin-left: auto;  
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    height: 48px;
+    margin-top: -3px;
+}
+
+#logo a h1 {
+    font-family: 'Rouge Script', cursive;
+    font-weight: 400;
+    margin: 0;
+    font-size: 44px;
+}
+
+.card {
+    margin: 4% 2%;
+    padding: 1% 2%;
+    background-color: white;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+}
+
+.card h3 {
+    font-weight: 300;
+    font-size: 1.3em;
+}
+
+.calendar-table {
+    width: 80%;
+    height: 336px;
+    margin-left: 10%;
+    text-align: center;
+    
+}
+
+.menu-button {
+    display: block; 
+    width: 52px; 
+    height: 52px; 
+    position: absolute;
+}
+.menu-button img {
+    width: 40px;
+    height: 40px;
+    margin-top: 6px;
+}
+
+#ultraContainer {
+    overflow: hidden;
+}
+
+.next-dates, .topics, .references {
+    list-style-type: none;
+    padding: 0.7% 5%;
+    width: 80%;
+    margin-left: 5%;
+    background-color: #ececec;
+    margin-bottom: 0;
+}
+
+.next-dates li, .topics li, .references li{
+    min-height: 30px;
+    border-top: 1px solid #AAAAAA;
+    padding: 2px 15px;
+    font-size: 0.8em;
+}
+
+.next-dates li:first-child, .topics li:first-child, .references li:first-child {
+    border-top: none;
+}
+
+.next-dates li a, .topics li a, .references li a {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color:black;
+}
+
+.group {
+    float: right;
+    color: #C2C2C2;
+    font-weight: bold;
+}
+
+.due {
+    font-weight: bold;
+    color: #C2C2C2;
+}
+
+.date-header, .reference-name {
+    font-size: 1.25em;
+    display: block;
+    margin-left: 4%;
+    white-space: pre-wrap; /* css-3 */    
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */    
+    white-space: -o-pre-wrap; /* Opera 7 */    
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+#nav {
+    margin: 0 0;
+    background-color: #e5e5e5;
+    height: 100%;
+    position: fixed;
+    padding-left: 0;
+    padding-top: 30px;
+    width: 70%;
+    list-style-type: none;
+}
+
+#nav li {
+    float: left;
+    width: 48%;
+    text-align: center;
+    height: 10%;
+    background: white;
+    margin: 2px;
+}
+
+nav li a {
+    display: block;
+    height: 100%;
+}
+
+[role="navigation"],
+[role="main"] {
+    -webkit-transition: .2s all ease;
+    -moz-transition: .2s all ease;
+    -o-transition: .2s all ease;		
+    -ms-transition: .2s all ease;
+    transition: .2s all ease;
+}
+
+[role="navigation"] {
+    padding-top: 52px;
+    height: 100%;
+}
+[role="main"] {
+    width: 100%;
+    padding-top: 52px;
+}
+
+.js [role="navigation"] {	
+    margin-left: -100%;
+    float: left;
+}
+
+.js [role="main"] {
+    margin-left: 0;
+    float: left;
+}
+
+/*If the user clicks on the menu button,
+//jQuery will append the .active-nave class to
+//the different roles.*/
+
+.active-nav [role="navigation"] {	
+    margin-left: 0;	
+    width: 70%;
+}
+
+.active-nav [role="main"]{
+    -webkit-transition: .1s all ease;
+    -moz-transition: .1s all ease;
+    -o-transition: .1s all ease;		
+    -ms-transition: .1s all ease;
+    transition: .1s all ease;
+    margin-right: -100%;
+}
+
+.load-more-button {
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: #ececec;
+    border: 0;
+    border-top: 1px solid #AAAAAA;
+}
+
+#group-name-headline h2, #topic-name-headline h2 {
+    width: 100%;
+    text-align: center;
+    font-weight: 300;
+}
+#group-name-headline, #topic-name-headline {
+    border-bottom: 1px solid #424242;
+}
+
+.card-text, .topic-element {
+    background-color: #ececec;
+    padding: 0.7% 5%;
+    width: 80%;
+    margin-left: 5%;
+}
+
+.blur {
+    -webkit-filter: opacity(2px);
+    -moz-filter: opacity(2px);
+    -o-filter: opacity(2px);
+    -ms-filter: opacity(2px);
+    filter: opacity(0.3);
+    opacity: 0.3;
+}
+
+#profile-information {
+    padding: 0 10%;
+    display: none;
+    height: 60%;
+    margin: 0 5%;
+    position: absolute;
+    background-color: white;
+    top: 20%;
+    z-index: 9999999;
+    width: 70%;
+}
+
+.profile-picture {
+    width: 40%;
+}
+
+#social-links {
+    width: 50%; 
+}
+
+#profile-information h2 {
+    font-weight: 300;
+    text-align: center;
+}
+
+#fb-link {
+    height: 29px;
+    position: absolute;
+    width: 60%;
+}
+
+#fb-link span {
+    margin-left: 6%;
+    margin-top: 3px;
+    display: inline-block;
+    height: 22px;
+    position: absolute
+}
+
+.error {
+    color: red;
+    display: none;
+}

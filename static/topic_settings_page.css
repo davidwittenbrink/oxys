@@ -1,0 +1,20 @@
+.card {
+    padding: 4%;
+}
+
+h2 {text-align: center; font-size: 1.4em;}
+
+.reference-removal {
+    background-color: #ececec;
+    padding: 3%;
+    margin-bottom: 2%;
+}
+
+.reference-by {
+    font-size: 1.1em;
+    margin-bottom: 4%;
+}
+
+.reference {
+    margin-left: 6%;
+}

@@ -1,0 +1,136 @@
+h3 {
+    margin-top: 8.7%;
+}
+
+.comments {
+    margin-top: 8%;
+}
+
+.delete-button {
+    float: right;
+    margin-top: -1%;
+    margin-right: -2.2%;
+}
+
+.card-text {
+    margin: 3%;
+}
+
+.event-card {
+    padding-bottom: 7%;
+}
+
+.event-creator {
+    float: right;
+    color: #C2C2C2;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.event-name h3 a {
+    color: #e99322;
+    text-decoration: none;
+}
+
+.plus-button, .minus-button {
+    width: 47%;
+    height: 50px;
+    margin: 4% 1%;
+    background-color: #ececec;
+    display: block;
+    float: left;
+}
+.minus-button span, .plus-button span {
+    display: block;
+    height: 20px;
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.plus-button {
+    border: 1px solid green;
+}
+
+.minus-button {
+    border: 1px solid red;
+}
+
+.hidden-content {
+    border-top: 1px solid #AAAAAA;
+    background-color: #ececec;
+    padding: 3%;
+    display: none;
+}
+
+.load-comments img {
+    height: 20px;
+    float: right;
+    margin-right: 20px;
+}
+
+.load-comments {
+    border-top: 0;
+}
+
+.comment {
+    margin: 3%;
+}
+
+.comment img {
+    width: 10%;
+    max-width: 50px;
+}
+
+.comment-content {
+    padding: 3%;
+    width: 91%;
+    min-height: 50px;
+    background-color: white;
+    display: inline-block;
+}
+
+.comment textarea {
+    font-family: inherit;
+    font-weight: 300;
+    resize: none;
+    border: none;
+    padding: 3%;
+    width: 91%;
+    min-height: 50px;
+    background-color: white;
+    display: block;
+    font-size: inherit;
+}
+
+#send-comment {
+    border: 0;
+    width: 97%;
+    height: 30px;
+    background-color: white;
+    display: inline-block;
+    text-align: right;
+}
+
+#load-older {
+    height: 40px;
+    text-align: center;
+    border: 0;
+    background-color: white;
+    width: 40%;
+    margin-left: 30%;
+}
+
+.description {
+    background-color: #ececec;
+    padding: 0.7% 5%;
+    width: 80%;
+    margin-left: 5%;
+    margin-bottom: 4%;
+    
+}
+
+.event-info {
+    margin-left: 5%;
+    margin-bottom: 2.5%;
+}

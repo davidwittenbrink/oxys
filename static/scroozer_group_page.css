@@ -1,0 +1,151 @@
+@media all and (max-height: 400px) {
+    #share {height: 320px !important; margin-top: -160px !important;}
+    #share-wrapper {height: 285px !important; margin-top: -142.5px !important;}
+    
+}
+
+
+h2 {
+    font-weight: inherit
+}
+
+.center-h2 {
+    text-align: center;
+    font-size: 1.25em;
+}
+
+.center-h2 a {color: #e99322;}
+
+.hidden {display:none}
+
+.close-button {
+    float: right;
+    border: none;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    margin-top: 12px;
+    margin-right: 12px;}
+
+
+#share {
+    background-color: white;
+    position: fixed;
+    width: 90%;
+    height: 420px;
+    top: 50%;
+    margin-top: -210px;
+    left: 50%;
+    margin-left: -45%;
+    z-index: 4;
+}
+#share-wrapper {
+    position: fixed;
+    height: 80%;
+    width: 70%;
+    top: 50%;
+    left: 50%;
+    margin-top: -40%;
+    margin-left: -35%
+}
+
+#share h2, #share input {text-align: center; width: 100%;}
+#share h2 {margin: 40px 0;}
+
+#share input {border: none; background-color: #ececec; height: 30px;}
+
+@media all and (min-width: 600px) {
+    
+    #share {
+        width: 459px;
+        margin-left: -229.5px;
+        top: 50%;
+    }
+
+
+#share-wrapper {
+    height: 360px;
+    top: 50%;
+    position: fixed;
+    margin-top: -180px;
+    left: 50%;
+    width: 300px;
+    margin-left: -150px;
+}
+
+
+}
+
+.g-share {float:right; display: inline-block;}
+.fb-share-button{float: left; display: inline-block;}
+
+
+.view-all {
+    border: none;
+    border-top: 1px solid grey;
+    background-color: #ececec;
+    height: 35px;
+    width: 90%;
+    margin-left: 5%;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    cursor: pointer;
+}
+.authorized {
+    font-size: 0.8em;
+    width: 80%;
+    margin-left: 5%;
+    text-align: center;
+    margin-top: 4%;
+    font-weight: bold;
+    color: grey;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.card {
+    padding: 4%;
+}
+
+.card-text ul {
+    width: 100%;
+    padding: 0 0;
+}
+
+.card-text li {
+}
+
+.card-text ul li a {
+    display: block;
+    
+}
+
+.action {
+    display: inline-block;
+    width: 45%;
+    height: 30px;
+    margin-bottom: 2%;
+    margin-right: 2%;
+    margin-left: 0;
+}
+
+.action button {
+    background-color: #ececec;
+    width: 100%;
+    height: 100%;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;    
+}
+
+.admin-topics li {
+    display: inline-block;
+    width: 100%;
+}

@@ -1,0 +1,238 @@
+.hidden{
+    position:absolute;
+    left:-10000px;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
+input {
+    border-radius: 0;
+}
+
+body {
+    font-family: Open Sans;
+    font-weight: 300;
+    background-color: #f7f7f7;
+}
+h1 {
+    text-align: center;
+    font-family: 'Rouge Script', cursive;
+    color: #e99322;
+    font-size: 5.8em;
+}
+.learning {
+    font-weight: 400
+}
+.intro-text {
+    text-align: center;
+    line-height: 1.5em;
+}
+#content-wrapper {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#g-signin-button {
+    display: inline-block;
+    float: left;
+    margin-right: 24px;
+}
+#fb-signin-button {
+    display: inline-block;
+    float: left;
+}
+#social-buttons {
+    width: 274px;
+    margin-top: 7%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#email-signup {
+    width: 274px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 120px;
+}
+.sign-in-with {
+    float: left;
+    width: 100% ;
+    text-align: center;
+    margin: 5% auto;
+    font-weight: 400
+}
+#customBtn {
+    display: inline-block;
+    background: #dd4b39;
+    color: white;
+    width: 145px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+#customBtn:hover {
+    background: #e74b37;
+    cursor: pointer;
+}
+span.label {
+    font-weight: bold;
+}
+span.icon {
+    background: url('/static/graphics/g+_25_25.png') transparent 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    border-right: #bb3f30 1px solid;
+}
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Roboto',arial,sans-serif;
+}
+.error {
+    display: none;
+    color: #db3000;
+    font-size: 0.8em
+}
+.text-input {
+    border: none;
+    background-color;
+    height: 30px;
+    margin: 4% 0;
+    width: 100%
+}
+#email-hidden {
+    background-color: #ececec;
+    padding: 5%;
+    border-top: 1px solid black;
+    display: none;
+}
+.email-button {
+    width: 274px;
+    height: 35px;
+    border: none;
+    background-color: #ececec;
+    margin-top: 8%;
+}
+#create-button {
+    width: 100%;
+    background-color: white;
+    border: none;
+    height: 35px;
+    margin-top: 5%;
+}
+.opened {
+    border-bottom: 1px solid #cccccc;
+}
+.got-account {
+    display: block;
+    text-align: center;
+    width: 100%;
+    color: #e99322;
+    font-weight: 400;
+    font-size: 0.9em;
+    margin-top: 3%;
+    margin-bottom: 14%;
+}
+.blur {
+    -webkit-filter: opacity(2px);
+    -moz-filter: opacity(2px);
+    -o-filter: opacity(2px);
+    -ms-filter: opacity(2px);
+    filter: opacity(0.3);
+    opacity: 0.3;
+}
+.auth-window {
+    display: none;
+    position: fixed;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.42);
+    -moz-box-shadow:    0px 0px 5px rgba(50, 50, 50, 0.42);
+    box-shadow:         0px 0px 5px rgba(50, 50, 50, 0.42);
+    z-index: 111;
+    width: 70%;
+    height: 150px;
+    left: 50%;
+    top: 50%;
+    margin-left: -35%;
+    margin-top: -75px;
+    text-align: center;
+}
+.sign-in-window {
+    display: none;
+    position: fixed;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.42);
+    -moz-box-shadow:    0px 0px 5px rgba(50, 50, 50, 0.42);
+    box-shadow:         0px 0px 5px rgba(50, 50, 50, 0.42);
+    z-index: 111;
+    width: 95%;
+    height: 350px;
+    left: 50%;
+    top: 50%;
+    margin-left: -47.5%;
+    margin-top: -175px;
+}
+.sign-in-wrapper {
+    margin: 6%;
+}
+.close-button, .auth-close-button  {
+    background-color: inherit;
+    float: right;
+    border: none;
+    height:30px;
+    width: 30px;
+}
+.grey {
+    background-color: #ececec;
+}
+#login-button{
+    height: 30px;
+    width: 70px;
+    border: none;
+    background-color: #ececec;
+}
+#sign-in-form{
+    margin-top: 5%;
+}
+.first {
+    margin-top: 14%;
+}
+@media all and (min-width: 389px) {
+    .auth-window {
+        width: 389px;
+        margin-left: -194.5px;
+    }
+}
+@media all and (min-width: 497px) {
+    .sign-in-window {
+        width: 497px;
+        margin-left: -248.5px;
+    }
+}
+@media all and (max-width: 455px) {
+    h1 {
+        margin-top: 8%;
+    }
+}
+.sign-in-error{
+    margin-top: -3%
+}
+.top-link {
+    font-size: 0.8em;
+    color: #696969;
+    display: inline-block;
+    width: 49%;
+    text-decoration: none;
+}
+.authorize {
+    text-align: right;
+}
+.gender-string {
+    font-size: 0.9em;
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/settings_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys: Account Settings</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <script>
+            // Additional JS functions here
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '605822282815813', // App ID
+                    channelUrl : 'https://gcdc2013-oxys.appspot.com/channel.html', // Channel File
+                    status     : true, // check login status
+                    cookie     : true, // enable cookies to allow the server to access the session
+                    xfbml      : true  // parse XFBML
+                });
+                
+                // Additional init code here
+                
+            };
+            
+            // Load the SDK asynchronously
+            (function(d){
+                var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement('script'); js.id = id; js.async = true;
+                js.src = "//connect.facebook.net/en_US/all.js";
+                ref.parentNode.insertBefore(js, ref);
+            }(document));
+        </script>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button" />
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <h2>Your account settings:</h2>
+                    <div id="profile-settings">
+                        <div>Choose a profile picture:</div>
+                        <br />
+                        {% if user.google_profile_pic_url %}
+                        <label>
+                            <img 
+                                {% if user.active_pic == "google" or user.active_pic == None %} class="active" {%endif%}
+                                src="{{ user.google_profile_pic_url }}" alt="profile_picture_small" 
+                                />
+                            <input type="radio" name="profile_pic" value="google"
+                                {% if user.active_pic == "google" or user.active_pic == None %} checked="checked" {%endif%}>
+                        </label>
+                        {% endif %}
+                        {% if user.fb_uid %}
+                        <label>
+                            <img 
+                                {% if user.active_pic == "facebook" or (not user.google_profile_pic_url and user.active_pic != "no") %} class="active" {%endif%}
+                                 src="/users/{{ user.key.urlsafe() }}/serveImage" 
+                                alt="profile_picture_small" />
+                            <input type="radio" 
+                                {% if user.active_pic == "facebook" or (not user.google_profile_pic_url and user.active_pic != "no") %} checked="checked" {%endif%}
+                                name="profile_pic" value="facebook">
+                        </label>
+                        {% endif %}
+                        <label>
+                            <img
+                                {% if user.active_pic == "no" or (not user.active_pic and not user.google_profile_pic_url and not user.fb_uid) %} class="active" {%endif%}
+                                {% if user.gender == "male" %}src="/static/images/avatar_50px_m.png" alt="profile_picture_small" />
+                                {% else %}
+                                src="/static/images/avatar_50px_f.png" alt="profile_picture_small" />
+                                {% endif %}
+                            <input 
+                                {% if user.active_pic == "no" or (not user.google_profile_pic and not user.fb_uid) %} checked="checked" {%endif%}
+                                type="radio" name="profile_pic" value="no">
+                        </label>
+                        <button class="submit-profile-picture">Save changes</button>
+                        <br />
+                        {% if 0 and user.password %}
+                        <div>Change your password:</div>
+                        <form>
+                            <div>
+                                <label><div class="pw-change-descr">Current password:</div>
+                                    <input class="display" type="password" name="current-pw"  />
+                                </label>
+                            </div>
+                            <div>
+                                <label><div class="pw-change-descr">New password:</div>
+                                    <input class="display" type="password" name="new-pw" />
+                                </label>
+                            </div>
+                            <div>
+                                <label><div class="pw-change-descr">Confirm password:</div>
+                                    <input class="display" type="password" name="confirm-new-pw" />
+                                </label>
+                            </div>
+                        </form>
+                        <br />
+                        {%endif%}
+                        <div>Delete or disconnect accounts:</div>
+                        <br />
+                        {% if user.google_profile_pic_url %}
+                        <button id="disconnect-google">Disconnect your Google Account</button>
+                        {% endif %}
+                        {% if user.fb_uid %}
+                        <button id="disconnect-fb">Disconnect your Facebook Account</button>
+                        {% endif %}
+                        {% if not user.google_profile_pic_url and not user.fb_uid %}
+                        <button id="delete-account">Delete your Account</button>
+                        {% endif %}
+                        <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}">
+                    </div>                   
+                </div><!-- end card -->
+                {% if groups %}
+                <div class="card">
+                    <h2>Your groups:</h2>
+                        <ul class="groups">
+                            {% for group in groups %}
+                            <li>
+                                <a href="/groups/{{ group.key.urlsafe() }}">{{ group.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        </div><!-- end card -->
+                {% endif %}
+                {% if topics %}
+                <div class="card">
+                    <h2>Your topics:</h2>
+                        <ul class="admin-topics">
+                            {% for topic in topics %}
+                            <li>
+                                <a href="/topics/{{ topic.key.urlsafe() }}">{{ topic.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        </div><!-- end card -->
+                {% endif %}
+                    </section>
+                </div><!-- end ultraContainer -->
+                <script>
+                    $( ".submit-profile-picture" ).click(function() {
+                        obj = {};
+                        obj["csrf_token"] = $( 'input[name=dontCSRFme]' ).val();
+                        obj["checked_pic"] = $('input[name=profile_pic]:checked').val();
+                        
+                        
+                        $.ajax({
+                            url: '/updateProfilePic',
+                            data: obj,
+                            dataType: "json",
+                            type: 'POST',
+                            success: function(result) {
+                                alert("Profile picture successfully changed.");
+                            },
+                            error: function(e) {
+                                console.log(e);
+                            }
+                        });
+                        
+                        
+                    });
+                    $( "label img" ).click(function() {
+                        $( "label img" ).each(function() {
+                            $(this).removeClass("active");
+                        });
+                        $( this ).toggleClass('active');
+                    });
+                    
+                    $( "#disconnect-google" ).click(function() {
+                        
+                        if (window.confirm('Are you sure you want to disconnect your Google Account?')) {
+                            deleteData("google");
+                        }
+                    });
+                    
+                    $( "#disconnect-fb" ).click(function() {
+                        if (window.confirm('Are you sure you want to disconnect your Facebook Account?')) {
+                            deleteData("facebook");
+                        }
+                    });
+                    
+                    $( "#delete-account" ).click(function() {
+                        if (window.confirm('Are you sure you want to delete your account?')) {
+                            
+                            deleteData("all");
+                        }
+                    });
+                    
+                    function deleteData(service, deleteAll) {
+                        obj = {}
+                        obj["service"] = service;
+                        obj["csrf_token"] = $( 'input[name=dontCSRFme]' ).val();
+                        console.log(obj);
+                        
+                        $.ajax({
+                            url: '/deleteData',
+                            data: obj,
+                            dataType: "json",
+                            type: 'POST',
+                            success: function(result) {
+                                if(service == "google") {
+                                    access_token = "{{ user.google_access_token }}";
+                                    disconnectGoogleUser(access_token);
+                                }
+                                else if(service == "facebook") {
+                                    disconnectFBUser();
+                                }
+                                else if(service == "all") {
+                                    window.location.reload();      
+                                }
+                                    },
+                            error: function(e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                    
+                    function disconnectGoogleUser(access_token) {
+                        var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' +
+                            access_token;
+                        
+                        // Perform an asynchronous GET request.
+                        $.ajax({
+                            type: 'GET',
+                            url: revokeUrl,
+                            async: false,
+                            contentType: "application/json",
+                            dataType: 'jsonp',
+                            success: function(nullResponse) {
+                                window.location = "/settings";
+                            },
+                            error: function(e) {
+                                if (window.confirm("We deleted your data but were not able to disconnect your Google account. Do you want to do it manually?")) {
+                                    window.location = "https://plus.google.com/apps";
+                                }
+                                else {
+                                    window.location = '/';
+                                }
+                            }
+                        });
+                    }
+                    
+                    function disconnectFBUser() {
+                        FB.api('/me/permissions', 'delete', function(response) {
+                            if(resonse == true) {
+                                window.location = "/";
+                            }
+                            else {
+                                if (window.confirm("We deleted your data but were not able to disconnect your Facebook account. Do you want to do it manually?")) {
+                                    window.location = "https://www.facebook.com/appcenter/my";
+                                }
+                                else {
+                                    window.location = '/'
+                                }
+                            }
+                        });          
+                    }
+                </script>
+            </body>
+        </html>

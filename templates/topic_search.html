@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/search_page.css" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <script src="/static/kul-substitute.js"></script>        
+        <title>Oxys</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button"/>
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <div class="row">
+                        <h2>
+                            What do you want to learn?
+                        </h2>
+                        <input class="input-field" type="search" />
+                        <button class="search-button">Search</button>
+                        <div class="hidden loading">Loading ...</div>
+                    </div><!--end row-->
+                </div><!-- end card -->
+                <div class="hidden card result-card">
+                    <h2>Results:</h2>
+                </div><!-- end card -->
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            $(".search-button").click( function(){
+                $(".input-field").blur;
+                search();                
+            });
+            
+            $(".input-field").submit( function(){
+                $(".input-field").blur;
+                search();                
+            });
+            $(".input-field").keypress( function(event){
+                if(event.which == 13) {
+                    $(".input-field").blur;
+                    search();             
+                }
+            });
+            
+            function search() {
+                obj = {"query": $('.input-field').val()}
+                trigger_Loading();
+                $.ajax({
+                    type: 'GET',
+                    url: "/topics/searchQuery",
+                    data: obj,
+                    dataType: "json",
+                    timeout: 18000,
+                    success: function(result){
+                        handleSearchResponse(result);    
+                        trigger_Loading();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError){
+                        alert("There was an error. Sorry about that!");
+                        console.log(xhr, ajaxOptions, thrownError);
+                        trigger_Loading();
+                    }
+                });
+            }
+            
+            var handleSearchResponse = function(result) {
+                html= ""
+                template_html = '<a href="${ topic_url }" class="search-result"><div class="search-headline">${ topic_name }</div><div class="search-description">${ topic_description } </div><div class="search-posted-in">Posted in 0${ in_groups } group(s)</div></a>'
+                if($(".result-card").hasClass('hidden')) {
+                    $(".result-card").toggleClass('hidden');
+                }
+                if(result.result.length > 0) {
+                    for(i=0; i < result.result.length; i++) {
+                        html += $.substitute(template_html, result["result"][i]);
+                    }
+                    $( ".result-card" ).html(html);
+                }
+                else {
+                    $( ".result-card" ).html("Sorry, no Topic was found :(");
+                }
+            }
+        </script>
+    </body>
+</html>

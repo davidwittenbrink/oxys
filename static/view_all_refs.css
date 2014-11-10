@@ -1,0 +1,26 @@
+table {
+    font-weight: inherit;
+    width: 100%;
+    text-align: center;
+    background-color: #ececec;
+    margin-bottom: 4%;
+}
+
+th {
+    font-weight: 400;
+}
+
+tr {
+    height: 35px;
+}
+
+tr a {
+    color: #e99322;
+    display: block;
+    height: 35px;
+    
+}
+
+.card {
+    padding: 4%;
+}

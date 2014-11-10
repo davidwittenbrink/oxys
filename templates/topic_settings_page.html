@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="stylesheet" href="/static/scroozer_add_page.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/topic_settings_page.css" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/jquery.autogrow-textarea.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys: Topic Settings</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button" />
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                <div class="card">
+                    <h2>Topic Settings:</h2>
+                </div>
+                <form method="post">
+                    <input type="hidden" name="dontCSRFme" value="{{ csrf_token }}" />
+                    <div class="card">
+                        <div class="row">
+                            <div class="user-to-do">
+                                Name:
+                            </div>
+                            <input class="input-field" name="topic_name" value="{{ topic.name }}" />
+                            <span class="error">
+                                You need to give your topic a name.
+                            </span>
+                        </div><!--end row-->
+                        <div class="row">
+                                <div class="user-to-do">
+                                    Description:
+                                </div>
+                            <textarea name="topic_description">{{ topic.description }}</textarea>
+                            </div><!--end row-->
+                        <div class="row">
+                            <label>
+                                <input class="topic-public" type="checkbox" name="public" {% if topic.is_public %} checked="checked" {% endif %}>
+                                Make this Topic public
+                            </label>
+                            <div class="row key-row {% if not topic.is_public%}hidden{% endif %}">
+                                <div class="user-to-do">
+                                    Keywords (seperated by spaces):
+                                </div>
+                                <input class="input-field" name="keywords" value="{{ formatted_keywords }}"/>
+                                <span class="explanation">e.g. programming, biology, ...</span>
+                            </div>
+                        </div><!--end row-->
+                    </div><!-- end card -->
+                    {% if admin_refs or member_refs %}
+                    <div class="card">
+                        <h3>Select the References you want to delete:</h3>
+                        {% if admin_refs %}
+                        
+                        <div class="reference-removal">
+                            <div class="reference-by">References by Admins:</div>
+                            {% for ref in admin_refs %}
+                            <div class="reference">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ ref.key.urlsafe() }}" name="reference" />
+                                        {{ ref.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end reference-removal -->
+                        {% endif %}
+                        {% if member_refs %}
+                        <div class="reference-removal">
+                            <div class="reference-by">References by Members:</div>
+                            {% for ref in member_refs %}
+                            <div class="reference">
+                                <label>
+                                    <div>
+                                        <input type="checkbox" value="{{ ref.key.urlsafe() }}" name="reference" />
+                                        {{ ref.name }}
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div><!-- end task-removal -->
+                        {% endif %}
+                    </div><!-- end card -->
+                    {% endif %}
+                    <div class="card">
+                        <input type="submit" class="topic-submit-button" value="Save Changes" />
+                    </div>
+                </form>                
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            //AUTO GROW TEXTAREA///////////////////////////
+            $(function() {
+                $('.row textarea').autogrow();
+            });
+            
+            $( ".topic-public" ).click(function() {
+                $( ".key-row" ).toggleClass("hidden");
+            });
+        </script>
+    </body>
+</html>

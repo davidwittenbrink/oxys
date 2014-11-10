@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" id="doc" class="js">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link href='https://fonts.googleapis.com/css?family=Rouge+Script' rel='stylesheet' type='text/css'>        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/scroozer_concept.css" />
+        <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png" />
+        <link rel="stylesheet" href="/static/scroozer_group_page.css" />
+        <script src="/static/jquery.js"></script>
+        <script src="/static/scripts.js"></script>
+        <title>Oxys</title>
+    </head>
+    <body>
+        <div id="header">	
+            <a class="menu-button" href="#menu">
+                <img src="/static/graphics/menu_button.svg" alt="menu-button">
+            </a>
+            <div id="logo">
+                <a href="/"><h1>Oxys</h1></a>
+            </div>
+        </div> <!--end header -->
+        <div id="ultraContainer">
+            <nav id ="menu" role="navigation">
+                <ul id="nav">
+                    <li><a href="/">
+                        <img src="/static/menu_icons/home.svg" alt="Go Home" />
+                        <div>Home</div>
+                        </a></li>
+                    <li><a href="/viewGroups">
+                        <img src="/static/menu_icons/groups.svg" alt="Create a Group" />
+                        <div>Groups</div>
+                        </a></li>
+                    <li class="test-icon">
+                        <a href="/createGroup">
+                            <img src="/static/menu_icons/create_group.svg" alt="Create a Group" />
+                            <div>Create</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings">
+                            <img src="/static/menu_icons/settings.svg" alt="Account Settings" />
+                            <div>Settings</div>
+                        </a>
+                    </li>
+                    <li><a class="menu-log-out" href="/logout">
+                        <img src="/static/menu_icons/logout.svg" alt="Logout" />
+                        <div>Logout</div>
+                        </a></li>
+                </ul>
+            </nav>
+            <section role="main">
+                {%if not (admin_tasks or member_tasks or admin_events or member_events or admin_topics or admin_groups or member_groups) %}
+                <div class="card">
+                    <h2>Welcome, {{ user.first_name }}!</h2>
+                    <div class="card-text welcome-message">
+                        We see you're new here. <br /> Don't worry, you will know your way around in minutes. <br /><br />On this page you're going to see a summary of all Tasks (Homeworks, ...) and Events (Tests, ...). <br /><br />
+                        For now, you could start by <a href="/createGroup">creating a Group</a> (for your class, maybe?) and adding a Topic to it. 
+                    </div>
+                </div>
+                {% else %}
+                <div class="card">
+                    <h2>Welcome back, {{ user.first_name }}.</h2>
+                </div>
+                {% if admin_tasks %}
+                <div class="card">
+                    <h3>Upcoming Tasks (by Admins):</h3>
+                    <ul class="next-dates">
+                        {% for task in admin_tasks %}
+                        <li>
+                            <a href="/groups/{{ task[1].key.parent().urlsafe() }}/tasks/{{ task[1].key.urlsafe() }}">
+                                <span data-utc-string="{{ task[1].due_utc }}" class="due"></span>
+                                <span class="group">{{ task[0][0]|upper }}</span>
+                                <span class="date-header">{{ task[1].name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if admin_tasks|length >= 5 %}
+                    <a href="/viewAdminTasks"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if member_tasks %}
+                <div class="card">
+                    <h3>Upcoming Tasks (by Members):</h3>
+                    <ul class="next-dates">
+                        {% for task in member_tasks %}
+                        <li>
+                            <a href="/groups/{{ task[1].key.parent().urlsafe() }}/tasks/{{ task[1].key.urlsafe() }}">
+                                <span data-utc-string="{{ task[1].due_utc }}" class="due"></span>
+                                <span class="group">{{ task[0][0]|upper }}</span>
+                                <span class="date-header">{{ task[1].name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if member_tasks|length >= 5 %}
+                    <a href="/viewMemberTasks"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if admin_events %}
+                <div class="card">
+                    <h3>Upcoming Events (by Admins):</h3>
+                    <ul class="next-dates">
+                        {% for event in admin_events %}
+                        <li>
+                            <a href="/groups/{{ event[1].key.parent().urlsafe() }}/events/{{ event[1].key.urlsafe() }}">
+                                <span data-utc-string="{{ event[1].starting_day_utc }}" class="due"></span>
+                                <span class="group">{{ event[0][0]|upper }}</span>
+                                <span class="date-header">{{ event[1].name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if admin_events|length >= 5 %}
+                    <a href="/viewAdminEvents"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if member_events %}
+                <div class="card">
+                    <h3>Upcoming Events (by Members):</h3>
+                    <ul class="next-dates">
+                        {% for event in member_events %}
+                        <li>
+                            <a href="/groups/{{ event[1].key.parent().urlsafe() }}/events/{{ event[1].key.urlsafe() }}">
+                                <span data-utc-string="{{ event[1].starting_day_utc }}" class="due"></span>
+                                <span class="group">{{ event[0][0]|upper }}</span>
+                                <span class="date-header">{{ event[1].name }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if member_events|length >= 5 %}
+                    <a href="/viewMemberEvents"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if admin_groups %}
+                <div class="card">
+                    <h3>Groups you administer:</h3>
+                    <ul class="groups">
+                        {% for group in admin_groups %}
+                        {%if group%}
+                        <li>
+                            <a href="/groups/{{ group.key.urlsafe() }}">
+                                {{ group.name }}
+                            </a>
+                        </li>
+                        {%endif%}
+                        {% endfor %}
+                    </ul>
+                    {% if admin_groups|length >= 5 %}
+                    <a href="/viewAdminGroups"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if member_groups %}
+                <div class="card">
+                    <h3>Groups that you're a Member of:</h3>
+                    <ul class="groups">
+                        {% for group in member_groups %}
+                        {%if group%}
+                        <li>
+                            <a href="/groups/{{ group.key.urlsafe() }}">
+                                {{ group.name }}
+                            </a>
+                        </li>
+                        {%endif%}
+                        {% endfor %}
+                    </ul>
+                    {% if member_groups|length >= 5 %}
+                    <a href="/viewMemberGroups"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if admin_topics %}
+                <div class="card">
+                    <h3>Your Topics:</h3>
+                    <ul class="admin-topics">
+                        {% for topic in admin_topics %}
+                        {%if topic%}
+                        <li>
+                            <a href="/topics/{{ topic.key.urlsafe() }}">
+                                {{ topic.name }}
+                            </a>
+                        </li>
+                        {%endif%}
+                        {% endfor %}
+                    </ul>
+                    {% if admin_topics|length >= 5 %}
+                    <a href="/viewTopics"><button class="view-all" type="button">View all</button></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% endif %}
+            </section>
+        </div><!-- end ultraContainer -->
+        <script>
+            $( ".due" ).each(function() {
+                utc_string = $( this ).data( "utc-string" );
+                d = new Date(utc_string);
+                $(this).text(d.toLocaleDateString());
+            });
+        </script>
+    </body>
+</html>

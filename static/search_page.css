@@ -1,0 +1,59 @@
+.card {
+    padding: 1% 5%;
+}
+
+h2 {
+    font-weight: inherit;
+    font-size: 1.2em;
+}
+
+.search-field {
+    width: 80%;
+}
+
+.search-button {
+    height: 30px;
+    border: none;
+    background-color: #ececec;
+    width: 15%;
+    margin: 0 0;
+}
+
+.search-result {
+    margin: 2% 0;
+    background-color: #ececec;
+    padding: 4%;
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.search-headline {
+    color: #e99322;
+    font-weight: 400;
+    margin: 1% 0;
+}
+
+.search-description {
+    font-size: 0.9em;
+    margin-left: 4%;
+}
+
+.search-posted-in {
+    width: 100%;
+    font-size: 0.7em;
+    text-align: right;
+}
+
+.hidden {
+    display: none;
+}
+
+.loading {
+    width: 100%;
+    text-align: center;
+}
+
+.search-field, .search-button {
+box-sizing: content-box;, -moz-box-sizing: content-box;, -ms-box-sizing: content-box;
+}
