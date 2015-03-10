@@ -11,4 +11,4 @@ I was able to put the things I learned in the udacity courses [Intro to Computer
 and [Web Development](https://www.udacity.com/course/cs253) into practice.
 
 
-You can try out the site here: [Oxys](gcdc2013-oxys.appspot.com)
+You can try out the site here: [Oxys](https://gcdc2013-oxys.appspot.com)
